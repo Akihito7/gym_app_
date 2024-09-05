@@ -1,10 +1,12 @@
 import React from "react";
-import { NativeBaseProvider, Box } from "native-base";
+import { NativeBaseProvider } from "native-base";
+import { Home } from "./src/screens/home";
+import { theme } from "./src/theme/custom-theme-native-base";
 
 export default function App() {
   return (
-    <NativeBaseProvider>
-      <Box>Hello world</Box>
+    <NativeBaseProvider theme={theme}>
+      <Home />
     </NativeBaseProvider>
   );
 }
