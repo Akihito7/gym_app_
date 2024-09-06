@@ -5,7 +5,8 @@ export const theme = extendTheme({
         primary : {
             "bg" : "#1E1E1E",
             "bgComponents" : "#202024",
-            "txtMain" : "#E1E1E6"
+            "txtMain" : "#E1E1E6",
+            "button" : "#6E58F5"
         }
     }
 })
