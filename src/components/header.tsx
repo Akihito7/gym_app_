@@ -1,14 +1,20 @@
-import { HStack, Text, useTheme } from "native-base";
+import { HStack, Text, VStack } from "native-base";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-
+import localImage from "../../assets/icon.png"
+import { UserPhoto } from "./userPhoto";
 export function Header() {
-    const { colors } = useTheme();
-    return (
-        <HStack pt={12} pb={6} px={4} justifyContent="space-between" alignItems="center" bg="primary.bgComponents">
-            <MaterialIcons name="menu" size={40} color={colors.primary.txtMain}/>
-            <HStack flex={1} justifyContent="center" alignItems="center">
-                <Text color="primary.txtMain" textAlign="center" fontSize={24}>Workout</Text>
-            </HStack>
-        </HStack>
-    )
+
+  return (
+    <VStack pt={16} pb={6} px={4} bg="primary.bgComponents">
+      <HStack alignContent="center" justifyContent={"space-between"} w={"full"} mb={4}>
+        <MaterialIcons name="menu" size={36} color="#E1E1E6" />
+        <UserPhoto
+          sizes={12}
+          source={localImage}
+          alt="imagem de perfil"
+        />
+      </HStack>
+      <Text fontSize={26} fontWeight="bold" color="primary.txtMain">Hi, Akihito 👋</Text>
+    </VStack>
+  )
 }
