@@ -2,27 +2,27 @@ import { Button, HStack, Text, VStack } from "native-base";
 import { PhotoCardRoutineExercise } from "./photo-card-exercise-routine";
 
 
-function TableHeader() {
+function TableHeader({ activeSession } : {activeSession : boolean}) {
   return (
     <HStack w="full" mt={4}>
       <Text w={"1/3"} fontSize={16} color="primary.txtMain">Series</Text>
       <Text w={"1/3"} fontSize={16} color="primary.txtMain">Reps</Text>
-      <Text w={"1/3"} fontSize={16} color="primary.txtMain">Kg</Text>
+      {activeSession&& <Text w={"1/3"} fontSize={16} color="primary.txtMain">Kg</Text>}
     </HStack>
   )
 }
 
-function RowTable() {
+function RowTable({ activeSession } : {activeSession : boolean}) {
   return (
     <HStack w="full" mt={2}>
       <Text w={"1/3"} fontSize={16} color="primary.txtMain">1</Text>
       <Text w={"1/3"} fontSize={16} color="primary.txtMain">10</Text>
-      <Text w={"1/3"} fontSize={16} color="primary.txtMain">70kg</Text>
+      {activeSession&& <Text w={"1/3"} fontSize={16} color="primary.txtMain">Kg</Text>}
     </HStack>
   )
 }
 
-export function CardExerciseRoutine() {
+export function CardExerciseRoutine({ activeSession } : {activeSession : boolean}) {
   return (
     <VStack>
       <HStack w={"full"} alignItems="center">
@@ -32,9 +32,8 @@ export function CardExerciseRoutine() {
           <Text fontSize={14} color="primary.txtMain">Biceps</Text>
         </VStack>
       </HStack>
-      <TableHeader />
-      <RowTable />
-
+      <TableHeader activeSession={activeSession} />
+      <RowTable activeSession={activeSession}/>
       <Button mt={2} bg="primary.bgComponents" _pressed={{
         bg: "primary.bgComponents",
         opacity: "0.5"

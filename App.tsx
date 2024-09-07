@@ -6,11 +6,12 @@ import { ExerciseLibrary } from "./src/screens/exercise-library";
 import { ExerciseDetails } from "./src/screens/exercise-details";
 import { CardExerciseRoutine } from "./src/components/card-exercise-routine";
 import { CreateRoutine } from "./src/screens/create-routine";
+import { WorkoutTracker } from "./src/screens/workout-tracker";
 
 export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
-      <CreateRoutine />
+      <WorkoutTracker />
     </NativeBaseProvider>
   );
 }

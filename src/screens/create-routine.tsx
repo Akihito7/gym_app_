@@ -17,7 +17,7 @@ export function CreateRoutine() {
           <FlatList
             data={DATAMOCKED}
             keyExtractor={item => String(item)}
-            renderItem={() => <CardExerciseRoutine />}
+            renderItem={() => <CardExerciseRoutine activeSession={false} />}
             ItemSeparatorComponent={() => <Box mt={6} />}
             showsVerticalScrollIndicator={false}
             flex={1}
