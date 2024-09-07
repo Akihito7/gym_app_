@@ -10,11 +10,12 @@ import { WorkoutTracker } from "./src/screens/workout-tracker";
 import { Profile } from "./src/screens/profile";
 import { Singln } from "./src/screens/signln";
 import { Signup } from "./src/screens/signup";
-
+import { AppRoutes } from "./src/routes/app.routes"
+import { Routes } from "./src/routes";
 export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
-      <Singln />
+      <Routes/>
     </NativeBaseProvider>
   );
 }
