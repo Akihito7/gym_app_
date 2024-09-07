@@ -3,6 +3,7 @@ import { CustomInput } from "../components/input";
 import { Header } from "../components/header";
 import { Select } from "native-base";
 import { CardExercise } from "../components/card-exercise";
+import { Feather } from "@expo/vector-icons";
 
 const DATAMOCKED = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -11,7 +12,9 @@ export function ExerciseLibrary() {
     <VStack flex={1} bg="primary.bg">
       <Header title="Exercicios" />
       <VStack px={4} mt={4} flex={1}>
-        <CustomInput placeholder="Pesquise aqui" />
+        <CustomInput placeholder="Pesquise aqui">
+        <Feather name="search" size={24} color="#E1E1E6" />
+        </CustomInput>
         <Select
           borderWidth={0}
           bg="primary.bgComponents"

@@ -3,6 +3,7 @@ import SvgUri from 'react-native-svg-uri';
 import LogoIMG from "../../assets/academia.svg"
 import { CustomInput } from "../components/input";
 import { TouchableOpacity } from "react-native";
+import { Feather } from "@expo/vector-icons";
 
 export function Singln() {
   return (
@@ -16,8 +17,12 @@ export function Singln() {
         <Text mt={2} fontSize={32} fontWeight={"bold"} color="primary.txtMain">AkihitoGym</Text>
 
         <VStack w="full" space={4} mt={8}>
-          <CustomInput placeholder="Email" />
-          <CustomInput placeholder="Senha" />
+          <CustomInput placeholder="Email" type="text">
+          <Feather name="user" size={24} color="#E1E1E6" />
+          </CustomInput>
+          <CustomInput placeholder="Senha" type="password">
+          <Feather name="lock" size={24} color="#E1E1E6" />
+          </CustomInput>
           <Button w="full" bg="primary.button" borderRadius={10} mb={8} h={12} _pressed={{
             bg: "primary.button",
             opacity: "0.5"

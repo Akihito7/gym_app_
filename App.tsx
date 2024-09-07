@@ -9,11 +9,12 @@ import { CreateRoutine } from "./src/screens/create-routine";
 import { WorkoutTracker } from "./src/screens/workout-tracker";
 import { Profile } from "./src/screens/profile";
 import { Singln } from "./src/screens/signln";
+import { Signup } from "./src/screens/signup";
 
 export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
-      <Singln />
+      <Signup />
     </NativeBaseProvider>
   );
 }

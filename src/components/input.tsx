@@ -1,12 +1,14 @@
 import { HStack, IInputProps, Input } from "native-base";
 import Feather from '@expo/vector-icons/Feather';
 
-type CustomInputProps = IInputProps
+type CustomInputProps = IInputProps & {
+  children: React.ReactNode
+}
 
-export function CustomInput({ ...rest }: CustomInputProps) {
+export function CustomInput({ children, ...rest }: CustomInputProps) {
   return (
     <HStack alignItems="center" bg="primary.bgComponents" borderRadius={10} h={12} px={4}>
-      <Feather name="search" size={24} color="#E1E1E6" />
+      {children}
       <Input
         fontSize={16}
         color={"primary.txtMain"}
