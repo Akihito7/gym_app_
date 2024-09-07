@@ -1,4 +1,4 @@
-import { Box, FlatList, Text, VStack } from "native-base";
+import { Box, Button, FlatList, Text, VStack } from "native-base";
 import { CustomInput } from "../components/input";
 import { Header } from "../components/header";
 import { Select } from "native-base";
@@ -38,7 +38,15 @@ export function ExerciseLibrary() {
             ItemSeparatorComponent={() => <Box mt={2} />}
             showsVerticalScrollIndicator={false}
             flex={1}
+            marginBottom={8}
           />
+
+          <Button bg={"primary.button"} _pressed={{
+            bg: "primary.button",
+            opacity: ".5"
+          }}>
+            <Text fontSize={16} color="primary.txtMain">Adicionar</Text>
+          </Button>
         </VStack>
       </VStack>
     </VStack>
