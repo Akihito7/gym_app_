@@ -8,11 +8,12 @@ import { CardExerciseRoutine } from "./src/components/card-exercise-routine";
 import { CreateRoutine } from "./src/screens/create-routine";
 import { WorkoutTracker } from "./src/screens/workout-tracker";
 import { Profile } from "./src/screens/profile";
+import { Singln } from "./src/screens/signln";
 
 export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
-      <Profile />
+      <Singln />
     </NativeBaseProvider>
   );
 }
