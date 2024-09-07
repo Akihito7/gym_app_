@@ -1,9 +1,9 @@
 import { Box, Button, HStack, Text, VStack } from "native-base";
-import { Header } from "../components/header";
+import { HeaderHome } from "../components/header-home";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { CustomInput } from "../components/input";
-import { CardWorkout } from "../components/cardWorkout";
+import { CardWorkout } from "../components/card-workout";
 import { FlatList } from "react-native";
 
 type CardOptionProps = {
@@ -30,7 +30,7 @@ const DATAMOCKED = [1, 2, 3, 4, 5, 6];
 export function Home() {
   return (
     <VStack flex={1} bg="primary.bg">
-      <Header />
+      <HeaderHome />
       <VStack flex={1} mt={2} padding={4}>
         <HStack justifyContent="space-between" mb={6}>
           <CardOption title="Nova rotina">
