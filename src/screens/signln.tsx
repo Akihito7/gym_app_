@@ -8,7 +8,7 @@ import { Feather } from "@expo/vector-icons";
 export function Singln() {
   return (
     <VStack flex={1} bg="primary.bg">
-      <VStack flex={1} px={4} alignItems="center" mt={40}>
+      <VStack flex={1} px={4} alignItems="center" mt={32}>
         <SvgUri
           source={LogoIMG}
           width={60}
@@ -35,7 +35,7 @@ export function Singln() {
             <Text fontSize={16} color="primary.txtMain" >Esqueceu sua senha?</Text>
           </TouchableOpacity>
 
-          <Button w="full" bg="transparent" borderWidth={1} borderColor={"primary.button"} borderRadius={10} mb={12} h={12} _pressed={{
+          <Button  w="full" bg="transparent" borderWidth={1} borderColor={"primary.button"} borderRadius={10} mb={4} h={12} _pressed={{
             bg: "primary.button",
           }}>
             <Text fontSize={16} color="primary.txtMain">Criar conta</Text>

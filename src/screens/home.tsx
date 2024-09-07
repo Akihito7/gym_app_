@@ -5,6 +5,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { CustomInput } from "../components/input";
 import { CardWorkout } from "../components/card-workout";
 import { FlatList } from "react-native";
+import { Feather } from "@expo/vector-icons";
 
 type CardOptionProps = {
   title: string;
@@ -40,7 +41,9 @@ export function Home() {
             <AntDesign name="plus" size={40} color="#E1E1E6" />
           </CardOption>
         </HStack>
-        <CustomInput />
+        <CustomInput >
+          <Feather name="search" size={24} color="#E1E1E6" />
+        </CustomInput>
         <Text fontSize={16} color="primary.txtMain" mt={4} mb={4}>
           Minhas rotinas
         </Text>

@@ -1,5 +1,4 @@
-import { HStack, Text, VStack } from "native-base";
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { HStack, Text } from "native-base";
 import localImage from "../../assets/icon.png"
 import { UserPhoto } from "./user-photo";
 export function HeaderHome (){
@@ -12,7 +11,7 @@ export function HeaderHome (){
           alt="imagem de perfil"
           mr={4}
         />
-      <Text fontSize={22} fontWeight="bold" color="primary.txtMain">Hi, Akihito 👋</Text>
+      <Text fontSize={22} fontWeight="bold" color="primary.txtMain">Hi, User 👋</Text>
     </HStack>
   )
 }

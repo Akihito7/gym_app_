@@ -14,7 +14,7 @@ import { Signup } from "./src/screens/signup";
 export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
-      <Signup />
+      <Singln />
     </NativeBaseProvider>
   );
 }
