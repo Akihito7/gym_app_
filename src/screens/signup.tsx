@@ -5,12 +5,21 @@ import { CustomInput } from "../components/input";
 import { TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { useNavigation } from "@react-navigation/native";
+import { AuthRoutesType } from "../routes/auth.routes";
+import { StackNavigationProp } from "@react-navigation/stack";
 
+type NavigationProps = StackNavigationProp<AuthRoutesType>;
 export function Signup() {
+  const { navigate }: NavigationProps = useNavigation();
+
+  function handleNavigate(){
+    navigate("signln")
+  }
   return (
     <VStack flex={1} bg="primary.bg">
       <ScrollView mt={8}>
-        <VStack flex={1} px={4} alignItems="center" mt={32}>
+        <VStack flex={1} px={4} alignItems="center" mt={24}>
           <SvgUri
             source={LogoIMG}
             width={60}
@@ -37,7 +46,9 @@ export function Signup() {
           </VStack>
           <Button w="full" bg="transparent" borderWidth={1} borderColor={"primary.button"} borderRadius={10} h={12} _pressed={{
             bg: "primary.button",
-          }}>
+          }}
+            onPress={handleNavigate}
+          >
             <Text fontSize={16} color="primary.txtMain">Ja tenho uma conta</Text>
           </Button>
         </VStack>
