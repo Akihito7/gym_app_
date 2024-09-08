@@ -1,7 +1,13 @@
 import { HStack, Image, Text, VStack, Checkbox} from "native-base";
 import ExerciseImg from "../../assets/exercise.png"
+import { ExercisesLibraryDTO } from "../dtos/exercises-library";
+import { ParagraphProps } from "react-native-paper";
 
-export function CardExercise() {
+
+type ParamsCardExercise = {
+  exercise : ExercisesLibraryDTO
+}
+export function CardExercise({ exercise } :  ParamsCardExercise) {
   return (
     <HStack w="full" bg="primary.bgComponents" borderRadius={10} alignItems="center">
       <Image
@@ -16,8 +22,8 @@ export function CardExercise() {
       />
 
       <VStack flex={1}>
-        <Text fontSize={16} color="primary.txtMain">Biceps barra w</Text>
-        <Text fontSize={16} color="primary.txtMain" >Biceps</Text>
+        <Text fontSize={16} color="primary.txtMain">{exercise.name}</Text>
+        <Text fontSize={16} color="primary.txtMain"></Text>
       </VStack>
 
       <Checkbox h={12} w={12} value=""/>

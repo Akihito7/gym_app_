@@ -1,4 +1,4 @@
-import { Box, Button, FlatList, Input, Text, TextArea, VStack } from "native-base";
+import { Box, Button, FlatList, Input, Text, TextArea, useNativeBase, VStack } from "native-base";
 import { Header } from "../components/header";
 import { CardExerciseRoutine } from "../components/card-exercise-routine";
 import { useEffect, useState } from "react";
@@ -8,46 +8,34 @@ import { Feather } from "@expo/vector-icons";
 import { useUserContext } from "../contexts/user-context";
 import { RoutineWithDetailsDTO } from "../dtos/routine-with-details";
 import { fetchRoutineWithDetails } from "../api/fetch-routine-with-details";
+import { useNavigation } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { AppRoutesType } from "../routes/app.routes";
 
+type NavigationProps = BottomTabNavigationProp<AppRoutesType>
 type Steps = 1 | 2
 const DATAMOCKED = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16];
 export function CreateRoutine() {
   const [step, setStep] = useState<Steps>(1);
 
-  const { routineId } = useUserContext();
-  const [routineWithDetails, setRoutineWithDetails] = useState<RoutineWithDetailsDTO>();
-  async function getRoutineWithDetails (){
-    const response = await fetchRoutineWithDetails(String(routineId));
-    setRoutineWithDetails(response);
-    console.log(response?.exercises[1].series)
-    console.log(response)
+  const { navigate }: NavigationProps = useNavigation()
+  function handleNavigate() {
+    navigate("exercise-library")
   }
-  useEffect(() => {
-    if(!routineId) return;
-    getRoutineWithDetails()
-  }, [routineId])
   return (
     <VStack flex={1} bg="primary.bg">
       <Header title="Criar rotina" />
       {step === 1 &&
         <VStack px={4} flex={1} mt={4}>
-          <FlatList
-            data={routineWithDetails?.exercises}
-            keyExtractor={item => String(item)}
-            renderItem={({ item }) => <CardExerciseRoutine activeSession={false} exercise={item} />}
-            ItemSeparatorComponent={() => <Box mt={6} />}
-            showsVerticalScrollIndicator={false}
-            flex={1}
-            marginBottom={8}
-          />
+
 
           <Button bg="primary.button" borderRadius={10} mb={12} mt={2} _pressed={{
             bg: "primary.button",
             opacity: "0.5"
           }}
-            onPress={() => setStep(2)}
+            onPress={handleNavigate}
           >
-            <Text fontSize={16} color="primary.txtMain">Ir para finalização</Text>
+            <Text fontSize={16} color="primary.txtMain">Adicionar exercicios</Text>
           </Button>
         </VStack>
       }
