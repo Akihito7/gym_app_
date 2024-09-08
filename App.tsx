@@ -12,10 +12,13 @@ import { Singln } from "./src/screens/signln";
 import { Signup } from "./src/screens/signup";
 import { AppRoutes } from "./src/routes/app.routes"
 import { Routes } from "./src/routes";
+import { UserContextProvider } from "./src/contexts/user-context";
 export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
-      <Routes/>
+      <UserContextProvider>
+        <Routes />
+      </UserContextProvider>
     </NativeBaseProvider>
   );
 }

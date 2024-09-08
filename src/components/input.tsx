@@ -2,10 +2,11 @@ import { HStack, IInputProps, Input } from "native-base";
 import Feather from '@expo/vector-icons/Feather';
 
 type CustomInputProps = IInputProps & {
-  children: React.ReactNode
+  children: React.ReactNode,
+  onChangeText?: (text: string) => void,
 }
 
-export function CustomInput({ children, ...rest }: CustomInputProps) {
+export function CustomInput({ children, onChangeText, ...rest }: CustomInputProps) {
   return (
     <HStack alignItems="center" bg="primary.bgComponents" borderRadius={10} h={12} px={4}>
       {children}
@@ -21,6 +22,7 @@ export function CustomInput({ children, ...rest }: CustomInputProps) {
           backgroundColor: "transparent"
         }}
         {...rest}
+        onChangeText={onChangeText}
       />
     </HStack>
   )
