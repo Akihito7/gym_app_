@@ -1,24 +1,40 @@
 import { Box, Button, FlatList, Input, Text, TextArea, VStack } from "native-base";
 import { Header } from "../components/header";
 import { CardExerciseRoutine } from "../components/card-exercise-routine";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { CustomInput } from "../components/input";
 import { Feather } from "@expo/vector-icons";
+import { useUserContext } from "../contexts/user-context";
+import { RoutineWithDetailsDTO } from "../dtos/routine-with-details";
+import { fetchRoutineWithDetails } from "../api/fetch-routine-with-details";
 
 type Steps = 1 | 2
 const DATAMOCKED = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16];
 export function CreateRoutine() {
   const [step, setStep] = useState<Steps>(1);
+
+  const { routineId } = useUserContext();
+  const [routineWithDetails, setRoutineWithDetails] = useState<RoutineWithDetailsDTO>();
+  async function getRoutineWithDetails (){
+    const response = await fetchRoutineWithDetails(String(routineId));
+    setRoutineWithDetails(response);
+    console.log(response?.exercises[1].series)
+    console.log(response)
+  }
+  useEffect(() => {
+    if(!routineId) return;
+    getRoutineWithDetails()
+  }, [routineId])
   return (
     <VStack flex={1} bg="primary.bg">
       <Header title="Criar rotina" />
       {step === 1 &&
         <VStack px={4} flex={1} mt={4}>
           <FlatList
-            data={DATAMOCKED}
+            data={routineWithDetails?.exercises}
             keyExtractor={item => String(item)}
-            renderItem={() => <CardExerciseRoutine activeSession={false} />}
+            renderItem={({ item }) => <CardExerciseRoutine activeSession={false} exercise={item} />}
             ItemSeparatorComponent={() => <Box mt={6} />}
             showsVerticalScrollIndicator={false}
             flex={1}
@@ -50,7 +66,7 @@ export function CreateRoutine() {
 
           <VStack px={4}>
             <CustomInput placeholder="Nome da rotina">
-            <Feather name="search" size={24} color="#E1E1E6" />
+              <Feather name="search" size={24} color="#E1E1E6" />
             </CustomInput>
             <TextArea autoCompleteType fontSize={16}
               mt={2}

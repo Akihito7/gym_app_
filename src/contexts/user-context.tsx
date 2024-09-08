@@ -8,12 +8,15 @@ type ParamsSignln = {
 
 type TypeUserContext = {
   signln: ({ email, password }: ParamsSignln) => void;
-  user : UserDTO;
+  user: UserDTO;
+  setRoutineId: React.Dispatch<null | number>
+  routineId: number | null 
 }
 const UserContext = createContext({} as TypeUserContext)
 
 export function UserContextProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState({} as UserDTO);
+  const [routineId, setRoutineId] = useState<null | number>(null)
   async function signln({ email, password }: ParamsSignln) {
     try {
       const response = await api.post("auth/signln", { email, password });
@@ -33,7 +36,9 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
   return (
     <UserContext.Provider value={{
       signln,
-      user
+      user,
+      setRoutineId,
+      routineId
     }}>
       {children}
     </UserContext.Provider>

@@ -1,7 +1,13 @@
 import { Button, Text, VStack } from "native-base";
 import { TouchableOpacity } from "react-native";
 
-export function CardWorkout() {
+
+type PropsCardWorkout = {
+  title : string;
+  onPress : () => void;
+}
+export function CardWorkout({ title, onPress } : PropsCardWorkout) {
+
   return (
     <TouchableOpacity style={{
       flexDirection: 'row',
@@ -10,15 +16,17 @@ export function CardWorkout() {
       padding: 10,
       backgroundColor: '#202024',
       borderRadius: 10,
-    }}>
+    }}
+    >
       <VStack>
-        <Text fontSize={16} color="primary.txtMain">Peito e triceps</Text>
+        <Text fontSize={16} color="primary.txtMain">{title}</Text>
         <Text fontSize={14} color="primary.txtMain">12 exercícios</Text>
       </VStack>
       <Button w={20} bg="primary.button" _pressed={{
-        bg : "primary.button",
-        opacity : "0.5"
-      }}>
+        bg: "primary.button",
+        opacity: "0.5"
+      }}
+      onPress={onPress}>
         <Text fontSize={14} color="primary.txtMain" >Start</Text>
       </Button>
     </TouchableOpacity>

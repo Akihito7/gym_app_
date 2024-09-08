@@ -10,7 +10,17 @@ import { ExerciseDetails } from "../screens/exercise-details";
 import { WorkoutTracker } from "../screens/workout-tracker";
 import { ExerciseLibrary } from "../screens/exercise-library";
 
-const { Navigator, Screen } = createBottomTabNavigator();
+
+export type AppRoutesType = {
+  home: undefined
+  "create-routine": undefined
+  profile: undefined
+  "exercise-details": undefined;
+  "workout-tracker": undefined;
+  "exercise-library": undefined
+};
+
+const { Navigator, Screen } = createBottomTabNavigator<AppRoutesType>();
 
 
 export function AppRoutes() {
@@ -27,12 +37,12 @@ export function AppRoutes() {
       }
 
     }}>
-      <Screen name="Home" component={Home} options={{
+      <Screen name="home" component={Home} options={{
         tabBarIcon: ({ color }) => (
           <Icon name="home" size={24} color={color} />
         )
       }} />
-      <Screen name="Profile" component={Profile} options={{
+      <Screen name="profile" component={Profile} options={{
         tabBarIcon: ({ color }) => (
           <Icon name="user" size={24} color={color} />
         )

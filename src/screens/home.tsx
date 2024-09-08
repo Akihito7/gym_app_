@@ -6,6 +6,13 @@ import { CustomInput } from "../components/input";
 import { CardWorkout } from "../components/card-workout";
 import { FlatList } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { fetchRoutines } from "../api/fetch-routines";
+import { useUserContext } from "../contexts/user-context";
+import { useEffect, useState } from "react";
+import { RoutinesDTO } from "../dtos/routines";
+import { useNavigation } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { AppRoutesType } from "../routes/app.routes";
 
 type CardOptionProps = {
   title: string;
@@ -28,7 +35,24 @@ function CardOption({ title, children }: CardOptionProps) {
 }
 
 const DATAMOCKED = [1, 2, 3, 4, 5, 6];
+type NavigationProps = BottomTabNavigationProp<AppRoutesType>
 export function Home() {
+  const { setRoutineId, routineId } = useUserContext();
+  const [routines, setRoutines] = useState<RoutinesDTO[]>([])
+  const { user } = useUserContext()
+  async function getRoutines() {
+    const routines = await fetchRoutines(String(user.id));
+    setRoutines(routines!)
+  }
+
+  const { navigate }: NavigationProps = useNavigation();
+  function handleNavigation(routineId: number | null) {
+    setRoutineId(routineId)
+    navigate('create-routine');
+  }
+  useEffect(() => {
+    getRoutines()
+  }, []);
   return (
     <VStack flex={1} bg="primary.bg">
       <HeaderHome />
@@ -48,9 +72,9 @@ export function Home() {
           Minhas rotinas
         </Text>
         <FlatList
-          data={DATAMOCKED}
+          data={routines}
           keyExtractor={item => String(item)}
-          renderItem={() => <CardWorkout />}
+          renderItem={({ item }) => <CardWorkout title={item.name} onPress={() => { handleNavigation(item.id) }} />}
           ItemSeparatorComponent={() => <Box mt={2} />}
           contentContainerStyle={{ flexGrow: 1 }}
           style={{ flex: 1 }}
