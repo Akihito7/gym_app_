@@ -2,6 +2,7 @@ import { Card, HStack, Text, VStack } from "native-base";
 import { Header } from "../components/header";
 import { UserPhoto } from "../components/user-photo";
 import ProfileImg from "../../assets/xama.jpeg"
+import { useUserContext } from "../contexts/user-context";
 
 type CardStatisticsProps = {
   title: string;
@@ -24,6 +25,7 @@ function CardRecentsWorkout() {
   )
 }
 export function Profile() {
+  const { user } = useUserContext()
   return (
     <VStack flex={1} bg="primary.bg">
       <Header title="Profile" />
@@ -33,7 +35,7 @@ export function Profile() {
           <UserPhoto sizes={16} source={ProfileImg} alt="Imagem do usuario" style={{
             objectFit: "cover"
           }} />
-          <Text ml={4} fontWeight="bold" fontSize={18} color="primary.txtMain">Xamazin</Text>
+          <Text ml={4} fontWeight="bold" fontSize={18} color="primary.txtMain">{user.username}</Text>
         </HStack>
 
 

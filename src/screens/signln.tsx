@@ -33,13 +33,11 @@ export function Singln() {
   };
   const { signln } = useUserContext();
   async function handleLogin({ email, password }: ParamsLogin) {
-    console.log(email, password)
     await signln({ email, password })
   }
   const { control, handleSubmit, formState: { errors } } = useForm<ParamsLogin>({
     resolver: yupResolver(schemaValidation)
   })
-  useEffect(() => console.log(errors), [errors])
   return (
     <VStack flex={1} bg="primary.bg">
       <VStack flex={1} px={4} alignItems="center" mt={32}>
