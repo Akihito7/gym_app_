@@ -1,13 +1,11 @@
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, TextInputProps, View } from "react-native";
 import { defaultTheme } from "../configs/default-theme";
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { useState } from "react";
 
-type ParamsInput = {
+type ParamsInput = TextInputProps & {
   children: React.ReactNode
+  onChangeText? : (value : string) => void;
 }
-export function Input({ children }: ParamsInput) {
-  const [searchValue, setSearchValue] = useState("");
+export function Input({ children, onChangeText, ...rest}: ParamsInput) {
 
   return (
     <View style={styles.container}>
@@ -16,7 +14,8 @@ export function Input({ children }: ParamsInput) {
         style={styles.input}
         placeholder="Buscar por rotinas"
         placeholderTextColor="#474747"
-        onChangeText={setSearchValue}
+        onChangeText={onChangeText}
+        {...rest}
       />
     </View>
   )

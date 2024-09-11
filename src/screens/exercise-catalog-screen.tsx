@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TypeAppRoutes } from "../routes/app.routes";
 import { FontAwesome } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
@@ -34,18 +35,25 @@ const exercises = [
 ];
 
 export function ExerciseCatalogScreen() {
-
+  const [searchInputValue, setSearchInputValue] = useState("");
   const { navigate } = useNavigation<TypeNavigation>();
 
   function handleNavigateToCreateRoutine() {
     navigate("create-routine");
   };
 
+  function handleInputValue(value  : string) {
+    setSearchInputValue(value)
+  }
+
   return (
     <View style={styles.container}>
       <Header title="Escolher exercicios" />
       <View style={styles.main}>
-        <Input>
+        <Input
+          placeholder="Busque pelo nome"
+          onChangeText={handleInputValue}
+        >
           <FontAwesome
             name="search"
             size={24}
@@ -53,7 +61,11 @@ export function ExerciseCatalogScreen() {
           />
         </Input>
         <FlatList
-          data={exercises}
+          data={
+            searchInputValue
+              ? exercises.filter(item => item.name.toLowerCase().includes(searchInputValue.toLowerCase()))
+              : exercises
+          }
           keyExtractor={item => String(item.id)}
           renderItem={({ item }) => (
             <ExerciseCatalogCard

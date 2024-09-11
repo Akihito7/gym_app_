@@ -15,7 +15,7 @@ type TypeStep = 1 | 2
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
 export function CreateRoutineScreen() {
-
+  const [searchInputValue, setSearchInputValue] = useState("");
   const { routineSelected } = useContextRoutine();
   const { navigate } = useNavigation<TypeNavigation>();
 
@@ -24,9 +24,12 @@ export function CreateRoutineScreen() {
   function nextStep() {
     setStep(2)
   }
-
   function backStep() {
     setStep(1)
+  }
+  
+  function handleInputValue(value  : string) {
+    setSearchInputValue(value)
   }
 
   return (
@@ -40,7 +43,9 @@ export function CreateRoutineScreen() {
         {
           step === 1 && routineSelected!.exercises.length > 0 && (
             <>
-              <Input>
+              <Input
+                onChangeText={handleInputValue}
+              >
                 <FontAwesome
                   name="search"
                   size={24}
@@ -48,7 +53,11 @@ export function CreateRoutineScreen() {
                 />
               </Input>
               <FlatList
-                data={routineSelected!.exercises}
+                data={
+                  searchInputValue
+                    ? routineSelected!.exercises.filter(item => item.name.toLowerCase().includes(searchInputValue.toLowerCase()))
+                    : routineSelected!.exercises
+                }
                 keyExtractor={item => String(item.id)}
                 renderItem={({ item }) => (
                   <ExerciseRoutineCard
@@ -79,13 +88,6 @@ export function CreateRoutineScreen() {
         {
           step === 1 && routineSelected!.exercises.length <= 0 && (
             <>
-              <Input>
-                <FontAwesome
-                  name="search"
-                  size={24}
-                  color={defaultTheme.colors.primaryText}
-                />
-              </Input>
               <View style={styles.empty}>
                 <Text style={styles.primaryText}>Nenhum exercicio adicionado</Text>
                 <TouchableOpacity
