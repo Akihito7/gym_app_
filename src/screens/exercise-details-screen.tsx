@@ -15,8 +15,9 @@ export function ExerciseDetailsScreen() {
   const { navigate } = useNavigation<TypeNavigation>();
 
   function handleNavigateBack() {
-    if (fromRoute === 'exercise-catalog') navigate("exercise-catalog")
-    else navigate("create-routine")
+    if (fromRoute === 'exercise-catalog') navigate("exercise-catalog");
+    if(fromRoute === 'view-routine') navigate("view-routine");
+    else navigate("create-routine");
   }
   
   return (

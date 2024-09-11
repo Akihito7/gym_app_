@@ -6,6 +6,7 @@ import { defaultTheme } from "../configs/default-theme";
 import { Platform } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { ExerciseDetailsScreen } from "../screens/exercise-details-screen";
+import { ViewRoutineScreen } from "../screens/view-routine-screen";
 
 export type TypeAppRoutes = {
   "home": undefined;
@@ -20,8 +21,9 @@ export type TypeAppRoutes = {
       gif: string;
       description: string;
     },
-    fromRoute : string
-  }
+    fromRoute: string
+  },
+  "view-routine": undefined;
 }
 const { Navigator, Screen } = createBottomTabNavigator<TypeAppRoutes>();
 
@@ -61,10 +63,16 @@ export function AppRoutes() {
           tabBarButton: () => null
         }}
       />
-
       <Screen
         name="exercise-details"
         component={ExerciseDetailsScreen}
+        options={{
+          tabBarButton: () => null
+        }}
+      />
+      <Screen
+        name="view-routine"
+        component={ViewRoutineScreen}
         options={{
           tabBarButton: () => null
         }}

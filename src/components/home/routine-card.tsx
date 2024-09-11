@@ -4,21 +4,48 @@ import Modal from "react-native-modal";
 import { defaultTheme } from "../../configs/default-theme";
 import Feather from '@expo/vector-icons/Feather';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { TypeAppRoutes } from "../../routes/app.routes";
+import { useNavigation } from "@react-navigation/native";
+import { useContextRoutine } from "../../hooks/useContextRoutine";
 
 type ParamsRoutineCard = {
+  id : number
   name : string;
   exercisesLength : number;
+  exercises : {
+    id: string;
+    name: string;
+    group: string;
+    gif: string;
+    description: string;
+  }[]
 }
-export function RoutineCard({ name, exercisesLength } : ParamsRoutineCard) {
+
+type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>;
+
+export function RoutineCard({ id, name, exercises, exercisesLength} : ParamsRoutineCard) {
   const [isModalVisible, setModalVisible] = useState(false);
+  const { navigate } = useNavigation<TypeNavigation>();
+  const { setRoutineSelected } = useContextRoutine()
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   }
+
+  function handleNavigateRoutine(){
+    const routine = {
+      id,
+      name,
+      exercises
+    };
+    setRoutineSelected(routine);
+    navigate("view-routine")
+  }
   return (
     <>
       <TouchableOpacity
-        onPress={() => { }}
+        onPress={handleNavigateRoutine}
         onLongPress={toggleModal}
       >
         <View style={styles.container}>

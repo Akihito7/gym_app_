@@ -68,6 +68,7 @@ export function ExerciseCatalogScreen() {
             color={defaultTheme.colors.primaryText}
           />
         </Input>
+        
         <FlatList
           data={
             searchInputValue

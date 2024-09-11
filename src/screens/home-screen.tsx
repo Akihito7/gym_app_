@@ -37,8 +37,14 @@ export function HomeScreen() {
         </View>
         <FlatList
           data={routines}
-          keyExtractor={item => String(item)}
-          renderItem={({ item }) => <RoutineCard key={item.id} name={item.name ?? ""} exercisesLength={item.exercises.length ?? 0} />}
+          keyExtractor={item => String(item.id)}
+          renderItem={({ item }) => <RoutineCard
+            key={item.id}
+            id={item.id ?? 0}
+            name={item.name ?? ""}
+            exercises={item.exercises}
+            exercisesLength={item.exercises.length ?? 0}
+          />}
           ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
           showsVerticalScrollIndicator={false}
           style={{
