@@ -14,7 +14,7 @@ export function ViewRoutineScreen() {
       <Header title={`Rotina ${routineSelected?.name}`} />
 
       <View style={styles.main}>
-        <Input>
+        <Input placeholder="Busque por um exercicio">
           <FontAwesome
             name="search"
             size={24}
@@ -41,7 +41,7 @@ export function ViewRoutineScreen() {
             marginTop: 24,
           }}
         />
-        
+
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Iniciar Treino</Text>
         </TouchableOpacity>
