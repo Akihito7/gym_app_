@@ -3,10 +3,28 @@ import { Header } from "../components/home/header";
 import { defaultTheme } from "../configs/default-theme";
 import { RoutineCard } from "../components/home/routine-card";
 import { Input } from "../components/home/input";
+import { useNavigation } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
+import { TypeAppRoutes } from "../routes/app.routes";
+import { useContextRoutine } from "../hooks/useContextRoutine";
+
+type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
 const routines = [1, 2, 3, 4, 5, 6, 7];
 
 export function HomeScreen() {
+  const { navigate } = useNavigation<TypeNavigation>();
+  const { setRoutineSelected } = useContextRoutine()
+
+  function handleNavagiteToCreateRoutineAndSetRoutineContext() {
+    setRoutineSelected({
+      id: null,
+      name: null,
+      exercises: []
+    });
+    navigate("create-routine");
+  }
+
   return (
     <View style={styles.container}>
       <Header />
@@ -26,7 +44,10 @@ export function HomeScreen() {
             marginBottom: 18,
           }}
         />
-        <TouchableOpacity style={styles.buttonCreateRoutine}>
+        <TouchableOpacity
+          style={styles.buttonCreateRoutine}
+          onPress={handleNavagiteToCreateRoutineAndSetRoutineContext}
+        >
           <Text style={styles.buttonText}>Criar nova rotina</Text>
         </TouchableOpacity>
       </View>

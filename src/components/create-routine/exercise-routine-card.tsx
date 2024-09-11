@@ -3,14 +3,27 @@ import { defaultTheme } from "../../configs/default-theme";
 import { Avatar } from "react-native-elements";
 import ExerciseImg from "../../../assets/biceps.png"
 import Feather from '@expo/vector-icons/Feather';
+import { useContextRoutine } from "../../hooks/useContextRoutine";
 
 type ParamsExerciseCard = {
-  id: number;
+  id: string;
   name: string;
   group: string;
 }
 
 export function ExerciseRoutineCard({ id, name, group }: ParamsExerciseCard) {
+  const { routineSelected, setRoutineSelected } = useContextRoutine();
+
+  function handleRemoveExerciseSelected() {
+    setRoutineSelected(prev => {
+      return {
+        id: prev.id ?? null,
+        name: prev.name ?? null,
+        exercises: prev.exercises.filter(item => item.id !== id)
+      }
+    });
+  };
+
   return (
     <TouchableOpacity>
       <View style={styles.container}>
@@ -24,7 +37,7 @@ export function ExerciseRoutineCard({ id, name, group }: ParamsExerciseCard) {
           <Text style={styles.secondaryText}>{group}</Text>
         </View>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleRemoveExerciseSelected}>
           <Feather name="trash" size={28} color={defaultTheme.colors.defaultRed} />
         </TouchableOpacity>
       </View>

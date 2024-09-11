@@ -3,7 +3,8 @@ import { defaultTheme } from "../../configs/default-theme";
 import { Avatar } from "react-native-elements";
 import ExerciseImg from "../../../assets/biceps.png"
 import { CheckBox } from "react-native-elements";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useContextRoutine } from "../../hooks/useContextRoutine";
 
 type ParamsExerciseCard = {
   id: number;
@@ -12,7 +13,57 @@ type ParamsExerciseCard = {
 }
 
 export function ExerciseCatalogCard({ id, name, group }: ParamsExerciseCard) {
-  const [checked, setChecked] = useState(false);
+
+  const { routineSelected, setRoutineSelected } = useContextRoutine();
+  const [checked, setChecked] = useState(checkedInitialState(id));
+
+  function checkedInitialState(id: number) {
+    const alreadySelected = routineSelected?.exercises.filter(item => item.id === String(id));
+    if (alreadySelected!.length > 0) return true;
+    else false
+  };
+
+  function CheckedExerciseRemovedFromRoutine() {
+    const removed = routineSelected!.exercises.filter(item => item.id === String(id))
+    if (removed!.length > 0) return;
+    else setChecked(false)
+  };
+
+  function handleAddExerciseInRoutine() {
+    const exercise = {
+      id: String(id),
+      name,
+      group,
+    }
+
+    const alreadyIncludes = routineSelected!.exercises.filter(item => item.id === exercise.id);
+
+    if (alreadyIncludes!.length <= 0) {
+      setChecked(prev => !prev)
+      setRoutineSelected(prev => {
+        return {
+          id: null,
+          name: null,
+          exercises: [...prev?.exercises, exercise]
+        }
+      })
+    }
+    if (alreadyIncludes.length > 0) {
+      setChecked(prev => !prev)
+      setRoutineSelected(prev => {
+        return {
+          id: null,
+          name: null,
+          exercises: prev?.exercises.filter(item => item.id !== exercise.id)
+        }
+      })
+    }
+  }
+
+  useEffect(() => {
+    CheckedExerciseRemovedFromRoutine()
+  }, [routineSelected?.exercises])
+
   return (
     <TouchableOpacity>
       <View style={styles.container}>
@@ -26,10 +77,7 @@ export function ExerciseCatalogCard({ id, name, group }: ParamsExerciseCard) {
           <Text style={styles.secondaryText}>{group}</Text>
         </View>
 
-        <CheckBox size={28} checked={checked} onPress={() => {
-          console.log("Exercise selected =>", id)
-          setChecked(prev => !prev)
-        }} />
+        <CheckBox size={28} checked={checked} onPress={handleAddExerciseInRoutine} />
       </View>
     </TouchableOpacity>
   )

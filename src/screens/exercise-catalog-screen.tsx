@@ -3,7 +3,12 @@ import { Header } from "../components/header";
 import { Input } from "../components/input";
 import { ExerciseCatalogCard } from "../components/exercise-catalog/exercise-catalog-card";
 import { defaultTheme } from "../configs/default-theme";
-import { ContextRoutineProvider } from "../contexts/context-routine";
+import { useNavigation } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { TypeAppRoutes } from "../routes/app.routes";
+import { FontAwesome } from "@expo/vector-icons";
+
+type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
 const exercises = [
   {
@@ -29,33 +34,49 @@ const exercises = [
 ];
 
 export function ExerciseCatalogScreen() {
+
+  const { navigate } = useNavigation<TypeNavigation>();
+
+  function handleNavigateToCreateRoutine() {
+    navigate("create-routine");
+  };
+
   return (
-      <View style={styles.container}>
-        <Header title="Escolher exercicios" />
-        <View style={styles.main}>
-          <Input />
-          <FlatList
-            data={exercises}
-            keyExtractor={item => String(item.id)}
-            renderItem={({ item }) => (
-              <ExerciseCatalogCard
-                key={item.id}
-                id={item.id}
-                name={item.name}
-                group={item.group}
-              />)}
-            ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
-            showsVerticalScrollIndicator={false}
-            style={{
-              marginBottom: 18,
-              marginTop: 24,
-            }}
+    <View style={styles.container}>
+      <Header title="Escolher exercicios" />
+      <View style={styles.main}>
+        <Input>
+          <FontAwesome
+            name="search"
+            size={24}
+            color={defaultTheme.colors.primaryText}
           />
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Adicionar</Text>
-          </TouchableOpacity>
-        </View>
+        </Input>
+        <FlatList
+          data={exercises}
+          keyExtractor={item => String(item.id)}
+          renderItem={({ item }) => (
+            <ExerciseCatalogCard
+              key={item.id}
+              id={item.id}
+              name={item.name}
+              group={item.group}
+            />)}
+          ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
+          showsVerticalScrollIndicator={false}
+          style={{
+            marginBottom: 18,
+            marginTop: 24,
+          }}
+        />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleNavigateToCreateRoutine}
+        >
+          <Text style={styles.buttonText}>Adicionar</Text>
+        </TouchableOpacity>
       </View>
+    </View>
   )
 }
 
@@ -63,7 +84,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    backgroundColor :  defaultTheme.colors.backgroundScreen
+    backgroundColor: defaultTheme.colors.backgroundScreen
   },
   main: {
     flex: 1,

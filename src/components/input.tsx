@@ -3,16 +3,15 @@ import { defaultTheme } from "../configs/default-theme";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useState } from "react";
 
-export function Input() {
+type ParamsInput = {
+  children: React.ReactNode
+}
+export function Input({ children }: ParamsInput) {
   const [searchValue, setSearchValue] = useState("");
-  
+
   return (
     <View style={styles.container}>
-      <FontAwesome
-        name="search"
-        size={24}
-        color={searchValue ? defaultTheme.colors.primaryText : "#474747" }
-      />
+      {children}
       <TextInput
         style={styles.input}
         placeholder="Buscar por rotinas"

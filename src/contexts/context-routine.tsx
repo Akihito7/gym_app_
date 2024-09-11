@@ -4,9 +4,9 @@ type ParamsContextRoutineProvider = {
   children: React.ReactNode
 };
 
-type TypeRoutineSelected = {
-  id: number;
-  name: string;
+export type TypeRoutineSelected = {
+  id: number| null;
+  name: string | null;
   exercises: {
     id: string;
     name: string;
@@ -16,13 +16,13 @@ type TypeRoutineSelected = {
 
 type TypeContextRoutine = {
   routineSelected: TypeRoutineSelected | undefined
-  setRoutineSelected: React.Dispatch<TypeRoutineSelected>
+  setRoutineSelected: React.Dispatch<React.SetStateAction<TypeRoutineSelected>>
 }
 
-const ContextRoutine = createContext({} as TypeContextRoutine);
+export const ContextRoutine = createContext({} as TypeContextRoutine);
 
 export function ContextRoutineProvider({ children }: ParamsContextRoutineProvider) {
-  const [routineSelected, setRoutineSelected] = useState<TypeRoutineSelected>();
+  const [routineSelected, setRoutineSelected] = useState<TypeRoutineSelected>({} as TypeRoutineSelected);
   return (
     <ContextRoutine.Provider value={{
       routineSelected,

@@ -6,8 +6,12 @@ import { defaultTheme } from "../configs/default-theme";
 import { Platform } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
-
-const { Navigator, Screen } = createBottomTabNavigator();
+export type TypeAppRoutes = {
+  home : undefined;
+ "exercise-catalog" : undefined;
+ "create-routine" : undefined;
+}
+const { Navigator, Screen } = createBottomTabNavigator<TypeAppRoutes>();
 
 export function AppRoutes() {
   return (
