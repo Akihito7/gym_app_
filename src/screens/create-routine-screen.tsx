@@ -59,6 +59,7 @@ export function CreateRoutineScreen() {
       <HeaderCreateRoutine
         nextStep={nextStep}
         backStep={backStep}
+        step={step}
       />
 
       <View style={styles.main}>
@@ -130,7 +131,10 @@ export function CreateRoutineScreen() {
           step === 2 && (
             <ScrollView showsVerticalScrollIndicator={false}>
               <View style={styles.containerStepTwo}>
-                <Input onChangeText={handleChangeRoutineName}>
+                <Input
+                  placeholder="Nome da sua rotina"
+                  onChangeText={handleChangeRoutineName}
+                >
                   <MaterialIcons
                     name="drive-file-rename-outline"
                     size={32}

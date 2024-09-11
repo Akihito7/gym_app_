@@ -6,25 +6,27 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 type TypeHeaderCreateRoutine = {
   nextStep(): void;
   backStep(): void;
+  step: number
 }
-export function HeaderCreateRoutine({ nextStep, backStep }: TypeHeaderCreateRoutine) {
+export function HeaderCreateRoutine({ nextStep, backStep, step }: TypeHeaderCreateRoutine) {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={backStep}>
         <AntDesign
           name="back"
           size={32}
-          color={defaultTheme.colors.iconActiveTintColor}
+          color={defaultTheme.colors.primaryText}
         />
       </TouchableOpacity>
 
       <Text style={styles.title}>Criar rotina</Text>
 
+
       <TouchableOpacity onPress={nextStep}>
         <AntDesign
           name="check"
           size={32}
-          color={defaultTheme.colors.iconActiveTintColor}
+          color={step === 1 ? defaultTheme.colors.primaryText : "transparent"}
         />
       </TouchableOpacity>
     </View>
