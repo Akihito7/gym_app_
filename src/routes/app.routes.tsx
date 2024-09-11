@@ -5,11 +5,23 @@ import { CreateRoutineScreen } from "../screens/create-routine-screen";
 import { defaultTheme } from "../configs/default-theme";
 import { Platform } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import { ExerciseDetailsScreen } from "../screens/exercise-details-screen";
 
 export type TypeAppRoutes = {
-  home : undefined;
- "exercise-catalog" : undefined;
- "create-routine" : undefined;
+  "home": undefined;
+  "exercise-catalog": undefined;
+  "create-routine": undefined;
+  "exercise-details":
+  {
+    item: {
+      id: string;
+      name: string;
+      group: string;
+      gif: string;
+      description: string;
+    },
+    fromRoute : string
+  }
 }
 const { Navigator, Screen } = createBottomTabNavigator<TypeAppRoutes>();
 
@@ -45,6 +57,14 @@ export function AppRoutes() {
       <Screen
         name="create-routine"
         component={CreateRoutineScreen}
+        options={{
+          tabBarButton: () => null
+        }}
+      />
+
+      <Screen
+        name="exercise-details"
+        component={ExerciseDetailsScreen}
         options={{
           tabBarButton: () => null
         }}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Modal from "react-native-modal";
 import { defaultTheme } from "../../configs/default-theme";

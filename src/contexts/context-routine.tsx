@@ -11,6 +11,8 @@ export type TypeRoutineSelected = {
     id: string;
     name: string;
     group: string;
+    gif : string;
+    description : string;
   }[]
 }
 

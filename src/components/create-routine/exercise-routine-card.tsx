@@ -4,15 +4,23 @@ import { Avatar } from "react-native-elements";
 import ExerciseImg from "../../../assets/biceps.png"
 import Feather from '@expo/vector-icons/Feather';
 import { useContextRoutine } from "../../hooks/useContextRoutine";
+import { useNavigation } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { TypeAppRoutes } from "../../routes/app.routes";
 
 type ParamsExerciseCard = {
   id: string;
   name: string;
   group: string;
+  gif: string;
+  description: string;
 }
 
-export function ExerciseRoutineCard({ id, name, group }: ParamsExerciseCard) {
+type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
+
+export function ExerciseRoutineCard({ id, name, group, gif, description }: ParamsExerciseCard) {
   const { routineSelected, setRoutineSelected } = useContextRoutine();
+  const { navigate } = useNavigation<TypeNavigation>()
 
   function handleRemoveExerciseSelected() {
     setRoutineSelected(prev => {
@@ -24,8 +32,21 @@ export function ExerciseRoutineCard({ id, name, group }: ParamsExerciseCard) {
     });
   };
 
+  function handleNavigateDetails() {
+    navigate("exercise-details", {
+      item: {
+        id: String(id),
+        name,
+        group,
+        gif,
+        description
+      },
+      fromRoute: "create-routine"
+    })
+  }
+
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={handleNavigateDetails}>
       <View style={styles.container}>
         <Avatar
           source={ExerciseImg}

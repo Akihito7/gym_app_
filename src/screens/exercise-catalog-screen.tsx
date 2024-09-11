@@ -15,22 +15,30 @@ const exercises = [
   {
     "id": 1,
     "name": "Supino Reto",
-    "group": "Peito"
+    "group": "Peito",
+    "gif": "https://media1.tenor.com/m/oaRRq3lgB-wAAAAd/barbellbenchpress-gymexercisesmen.gif",
+    "description": "Deite-se no banco, pés no chão. Segure a barra com as mãos na largura dos ombros. Abaixe a barra até o peito e levante-a de volta. Trabalha peito e tríceps."
   },
   {
     "id": 2,
     "name": "Agachamento",
-    "group": "Pernas"
+    "group": "Pernas",
+    "gif": "https://media1.tenor.com/m/pdMmsiutWkcAAAAC/gym.gif",
+    "description": "Fique em pé com os pés na largura dos ombros e a barra sobre os ombros. Agache até as coxas ficarem paralelas ao chão, e depois levante-se. Fortalece pernas e glúteos."
   },
   {
     "id": 3,
-    "name": "Puxada na Barra Fixa",
-    "group": "Costas"
+    "name": "Remada com Barra",
+    "group": "Costas",
+    "gif": "https://media1.tenor.com/m/AYJ_bNXDvoUAAAAC/workout-muscles.gif",
+    "description": "Incline o tronco para frente, mantendo as costas retas. Segure a barra com as mãos na largura dos ombros. Puxe a barra em direção ao abdômen e retorne. Foca nas costas e bíceps."
   },
   {
     "id": 4,
     "name": "Rosca Direta",
-    "group": "Bíceps"
+    "group": "Bíceps",
+    "gif": "https://media1.tenor.com/m/m2Dfyh507FQAAAAC/8preacher-curl.gif",
+    "description": "Fique em pé com os pés na largura dos ombros. Segure a barra com as mãos na largura dos ombros. Dobre os cotovelos e levante a barra até a altura dos ombros. Trabalha os bíceps."
   }
 ];
 
@@ -42,7 +50,7 @@ export function ExerciseCatalogScreen() {
     navigate("create-routine");
   };
 
-  function handleInputValue(value  : string) {
+  function handleInputValue(value: string) {
     setSearchInputValue(value)
   }
 
@@ -73,6 +81,8 @@ export function ExerciseCatalogScreen() {
               id={item.id}
               name={item.name}
               group={item.group}
+              gif={item.gif}
+              description={item.description}
             />)}
           ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
           showsVerticalScrollIndicator={false}

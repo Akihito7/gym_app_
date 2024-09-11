@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TypeAppRoutes } from "../routes/app.routes";
 import { HeaderCreateRoutine } from "../components/create-routine/header-create-routine";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
@@ -27,8 +27,8 @@ export function CreateRoutineScreen() {
   function backStep() {
     setStep(1)
   }
-  
-  function handleInputValue(value  : string) {
+
+  function handleInputValue(value: string) {
     setSearchInputValue(value)
   }
 
@@ -44,6 +44,7 @@ export function CreateRoutineScreen() {
           step === 1 && routineSelected!.exercises.length > 0 && (
             <>
               <Input
+                placeholder="Busque pelo nome"
                 onChangeText={handleInputValue}
               >
                 <FontAwesome
@@ -65,6 +66,8 @@ export function CreateRoutineScreen() {
                     id={item.id}
                     name={item.name}
                     group={item.group}
+                    gif={item.gif}
+                    description={item.description}
                   />)}
                 ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
                 showsVerticalScrollIndicator={false}

@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Pressable, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { defaultTheme } from "../../configs/default-theme";
 import { Avatar } from "react-native-elements";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';

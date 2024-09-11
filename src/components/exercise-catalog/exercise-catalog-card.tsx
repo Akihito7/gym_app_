@@ -5,17 +5,25 @@ import ExerciseImg from "../../../assets/biceps.png"
 import { CheckBox } from "react-native-elements";
 import { useEffect, useState } from "react";
 import { useContextRoutine } from "../../hooks/useContextRoutine";
+import { useNavigation } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { TypeAppRoutes } from "../../routes/app.routes";
 
 type ParamsExerciseCard = {
   id: number;
   name: string;
   group: string;
+  gif: string;
+  description: string;
 }
 
-export function ExerciseCatalogCard({ id, name, group }: ParamsExerciseCard) {
+type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
+
+export function ExerciseCatalogCard({ id, name, group, gif, description }: ParamsExerciseCard) {
 
   const { routineSelected, setRoutineSelected } = useContextRoutine();
   const [checked, setChecked] = useState(checkedInitialState(id));
+  const { navigate } = useNavigation<TypeNavigation>();
 
   function checkedInitialState(id: number) {
     const alreadySelected = routineSelected?.exercises.filter(item => item.id === String(id));
@@ -34,6 +42,8 @@ export function ExerciseCatalogCard({ id, name, group }: ParamsExerciseCard) {
       id: String(id),
       name,
       group,
+      gif, 
+      description
     }
 
     const alreadyIncludes = routineSelected!.exercises.filter(item => item.id === exercise.id);
@@ -60,12 +70,25 @@ export function ExerciseCatalogCard({ id, name, group }: ParamsExerciseCard) {
     }
   }
 
+  function handleNavigateDetails() {
+    navigate("exercise-details", {
+      item: {
+        id : String(id),
+        name,
+        group,
+        gif,
+        description
+      },
+      fromRoute  : "exercise-catalog"
+    })
+  }
+
   useEffect(() => {
     CheckedExerciseRemovedFromRoutine()
   }, [routineSelected?.exercises])
 
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={handleNavigateDetails}>
       <View style={styles.container}>
         <Avatar
           source={ExerciseImg}
