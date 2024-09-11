@@ -1,8 +1,9 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Header } from "../components/header";
 import { Input } from "../components/input";
-import { ExerciseCard } from "../components/exercise-catalog/exercise-card";
+import { ExerciseCatalogCard } from "../components/exercise-catalog/exercise-catalog-card";
 import { defaultTheme } from "../configs/default-theme";
+import { ContextRoutineProvider } from "../contexts/context-routine";
 
 const exercises = [
   {
@@ -29,32 +30,32 @@ const exercises = [
 
 export function ExerciseCatalogScreen() {
   return (
-    <View style={styles.container}>
-      <Header title="Escolher exercicios" />
-      <View style={styles.main}>
-        <Input />
-        <FlatList
-          data={exercises}
-          keyExtractor={item => String(item.id)}
-          renderItem={({ item }) => (
-            <ExerciseCard
-              key={item.id}
-              id={item.id}
-              name={item.name}
-              group={item.group}
-            />)}
-          ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
-          showsVerticalScrollIndicator={false}
-          style={{
-            marginBottom: 18,
-            marginTop: 24,
-          }}
-        />
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Adicionar</Text>
-        </TouchableOpacity>
+      <View style={styles.container}>
+        <Header title="Escolher exercicios" />
+        <View style={styles.main}>
+          <Input />
+          <FlatList
+            data={exercises}
+            keyExtractor={item => String(item.id)}
+            renderItem={({ item }) => (
+              <ExerciseCatalogCard
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                group={item.group}
+              />)}
+            ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
+            showsVerticalScrollIndicator={false}
+            style={{
+              marginBottom: 18,
+              marginTop: 24,
+            }}
+          />
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Adicionar</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
   )
 }
 
@@ -62,11 +63,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
+    backgroundColor :  defaultTheme.colors.backgroundScreen
   },
   main: {
     flex: 1,
     paddingHorizontal: 20,
-    marginBottom: 64,
+    marginBottom: 14,
     paddingTop: 24,
   },
   button: {

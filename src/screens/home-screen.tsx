@@ -4,7 +4,6 @@ import { defaultTheme } from "../configs/default-theme";
 import { RoutineCard } from "../components/home/routine-card";
 import { Input } from "../components/home/input";
 
-
 const routines = [1, 2, 3, 4, 5, 6, 7];
 
 export function HomeScreen() {
@@ -39,11 +38,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
+    backgroundColor: defaultTheme.colors.backgroundScreen
   },
   main: {
     flex: 1,
     paddingHorizontal: 20,
-    marginBottom: 64,
+    marginBottom: 14,
     paddingTop: 24,
   },
   containerHeaderRoutines: {

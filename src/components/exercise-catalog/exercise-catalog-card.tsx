@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { defaultTheme } from "../../configs/default-theme";
 import { Avatar } from "react-native-elements";
 import ExerciseImg from "../../../assets/biceps.png"
@@ -11,25 +11,27 @@ type ParamsExerciseCard = {
   group: string;
 }
 
-export function ExerciseCard({ id, name, group }: ParamsExerciseCard) {
+export function ExerciseCatalogCard({ id, name, group }: ParamsExerciseCard) {
   const [checked, setChecked] = useState(false);
   return (
-    <View style={styles.container}>
-      <Avatar
-        source={ExerciseImg}
-        size={64}
-        avatarStyle={{ borderRadius: 10 }}
-      />
-      <View style={styles.containerExerciseInfo}>
-        <Text style={styles.primaryText} numberOfLines={1}>{name}</Text>
-        <Text style={styles.secondaryText}>{group}</Text>
-      </View>
+    <TouchableOpacity>
+      <View style={styles.container}>
+        <Avatar
+          source={ExerciseImg}
+          size={64}
+          avatarStyle={{ borderRadius: 10 }}
+        />
+        <View style={styles.containerExerciseInfo}>
+          <Text style={styles.primaryText} numberOfLines={1}>{name}</Text>
+          <Text style={styles.secondaryText}>{group}</Text>
+        </View>
 
-      <CheckBox size={28} checked={checked} onPress={() => {
-        console.log("Exercise selected =>", id)
-        setChecked(prev => !prev)
-      }} />
-    </View>
+        <CheckBox size={28} checked={checked} onPress={() => {
+          console.log("Exercise selected =>", id)
+          setChecked(prev => !prev)
+        }} />
+      </View>
+    </TouchableOpacity>
   )
 }
 
@@ -46,7 +48,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     marginLeft: 16,
-    paddingRight : 20,
+    paddingRight: 20,
   },
   primaryText: {
     fontSize: 16,
