@@ -7,6 +7,8 @@ import { Platform } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { ExerciseDetailsScreen } from "../screens/exercise-details-screen";
 import { ViewRoutineScreen } from "../screens/view-routine-screen";
+import { ProfileScreen } from "../screens/profile-screen";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 export type TypeAppRoutes = {
   "home": undefined;
@@ -24,6 +26,7 @@ export type TypeAppRoutes = {
     fromRoute: string
   },
   "view-routine": undefined;
+  "profile": undefined;
 }
 const { Navigator, Screen } = createBottomTabNavigator<TypeAppRoutes>();
 
@@ -75,6 +78,18 @@ export function AppRoutes() {
         component={ViewRoutineScreen}
         options={{
           tabBarButton: () => null
+        }}
+      />
+      <Screen
+        name="profile"
+        component={ProfileScreen}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              name="face-man-profile"
+              size={32}
+              color={color} />
+          )
         }}
       />
     </Navigator>
