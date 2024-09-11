@@ -10,11 +10,12 @@ import { useContextRoutine } from "../hooks/useContextRoutine";
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
-const routines = [1, 2, 3, 4, 5, 6, 7];
+/* const routines = [1, 2, 3, 4, 5, 6, 7]; */
 
 export function HomeScreen() {
   const { navigate } = useNavigation<TypeNavigation>();
-  const { setRoutineSelected } = useContextRoutine()
+  const { setRoutineSelected } = useContextRoutine();
+  const { routines } = useContextRoutine()
 
   function handleNavagiteToCreateRoutineAndSetRoutineContext() {
     setRoutineSelected({
@@ -37,7 +38,7 @@ export function HomeScreen() {
         <FlatList
           data={routines}
           keyExtractor={item => String(item)}
-          renderItem={() => <RoutineCard />}
+          renderItem={({ item }) => <RoutineCard key={item.id} name={item.name ?? ""} exercisesLength={item.exercises.length ?? 0} />}
           ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
           showsVerticalScrollIndicator={false}
           style={{

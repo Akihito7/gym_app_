@@ -5,7 +5,11 @@ import { defaultTheme } from "../../configs/default-theme";
 import Feather from '@expo/vector-icons/Feather';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-export function RoutineCard() {
+type ParamsRoutineCard = {
+  name : string;
+  exercisesLength : number;
+}
+export function RoutineCard({ name, exercisesLength } : ParamsRoutineCard) {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const toggleModal = () => {
@@ -20,10 +24,10 @@ export function RoutineCard() {
         <View style={styles.container}>
           <View style={styles.containerDetails}>
             <Text style={styles.primaryText} numberOfLines={1}>
-              Peitoral no pump máximo
+              {name}
             </Text>
             <Text style={styles.secondaryText} numberOfLines={1}>
-              12 exercícios
+             {exercisesLength} exercícios
             </Text>
           </View>
           <TouchableOpacity style={styles.button} onPress={() => { }}>

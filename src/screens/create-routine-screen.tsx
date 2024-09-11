@@ -7,29 +7,51 @@ import { useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TypeAppRoutes } from "../routes/app.routes";
 import { HeaderCreateRoutine } from "../components/create-routine/header-create-routine";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { TypeRoutineSelected } from "../contexts/context-routine";
 
 type TypeStep = 1 | 2
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
 export function CreateRoutineScreen() {
   const [searchInputValue, setSearchInputValue] = useState("");
-  const { routineSelected } = useContextRoutine();
+  const [routineName, setRoutineName] = useState("");
   const { navigate } = useNavigation<TypeNavigation>();
+  const { routineSelected, setRoutineSelected, setRoutines } = useContextRoutine()
 
   const [step, setStep] = useState<TypeStep>(1);
 
   function nextStep() {
     setStep(2)
-  }
+  };
   function backStep() {
     setStep(1)
-  }
-
+  };
   function handleInputValue(value: string) {
     setSearchInputValue(value)
+  };
+
+  function handleChangeRoutineName(value: string) {
+    setRoutineName(value);
+  }
+
+  function handleCreateRoutine() {
+    const newRoutine = {
+      ...routineSelected,
+      id: 1,
+      name: routineName
+    } as TypeRoutineSelected;
+    setStep(1);
+    setRoutines(prev => [...prev, newRoutine]);
+    setRoutineName("");
+    setRoutineSelected({
+      id: null,
+      name: null,
+      exercises: []
+    });
+    navigate("home");
   }
 
   return (
@@ -108,7 +130,7 @@ export function CreateRoutineScreen() {
           step === 2 && (
             <ScrollView showsVerticalScrollIndicator={false}>
               <View style={styles.containerStepTwo}>
-                <Input>
+                <Input onChangeText={handleChangeRoutineName}>
                   <MaterialIcons
                     name="drive-file-rename-outline"
                     size={32}
@@ -132,7 +154,10 @@ export function CreateRoutineScreen() {
                   />
                 </View>
 
-                <TouchableOpacity style={styles.buttonFinisheRoutine}>
+                <TouchableOpacity
+                  style={styles.buttonFinisheRoutine}
+                  onPress={handleCreateRoutine}
+                >
                   <Text
                     style={styles.buttonTextFinisheRoutine}
                   >
