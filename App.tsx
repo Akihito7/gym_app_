@@ -1,14 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import { ContextRoutineProvider } from './src/contexts/context-routine';
 import { Routes } from './src/routes';
-import { TrainingSessionScreen } from './src/screens/training-session-screen';
+import { ContextWorkoutProvider } from './src/contexts/context-workout';
 
 export default function App() {
   return (
-    <ContextRoutineProvider>
+    <ContextWorkoutProvider>
+      <ContextRoutineProvider>
         <Routes />
         <StatusBar style="auto" />
-    </ContextRoutineProvider>
+      </ContextRoutineProvider>
+    </ContextWorkoutProvider>
   );
 }
 
