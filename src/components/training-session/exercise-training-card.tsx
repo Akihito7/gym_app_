@@ -6,8 +6,19 @@ import { Feather } from "@expo/vector-icons"
 import { HeaderTableSeries } from "./header-table-series"
 import { RowTableSeries } from "./row-table-series"
 
-export function ExerciseTrainingCard() {
-    
+type TypeExerciseTrainingCard = {
+    id: number;
+    name: string;
+    group: string;
+    series: {
+        id: number;
+        order: number;
+        reps: number;
+        kg: number
+    }[]
+}
+export function ExerciseTrainingCard({ id, name, group, series }: TypeExerciseTrainingCard) {
+
     return (
         <View style={styles.container}>
             <View style={styles.containerExerciseInfo}>
@@ -31,9 +42,17 @@ export function ExerciseTrainingCard() {
 
             <View style={styles.containerTable}>
                 <HeaderTableSeries />
-                <RowTableSeries />
-                <RowTableSeries />
-                <RowTableSeries />
+                {
+                    series.map(item => (
+                        <RowTableSeries
+                            id={item.id}
+                            order={item.order}
+                            kgsInital={item.kg}
+                            repsInital={item.reps}
+                        />
+                    ))
+                }
+
             </View>
 
             <TouchableOpacity style={styles.button}>
@@ -46,8 +65,8 @@ export function ExerciseTrainingCard() {
 
 const styles = StyleSheet.create({
     container: {
-        alignItems : "center",
-        justifyContent : "center"
+        alignItems: "center",
+        justifyContent: "center"
     },
     containerExerciseInfo: {
         width: "100%",
@@ -82,7 +101,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: defaultTheme.colors.backgroundComponents,
         height: 52,
-        marginTop : 8,
+        marginTop: 8,
         marginBottom: 12,
     },
     buttonText: {

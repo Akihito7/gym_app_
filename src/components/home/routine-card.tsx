@@ -10,10 +10,10 @@ import { useNavigation } from "@react-navigation/native";
 import { useContextRoutine } from "../../hooks/useContextRoutine";
 
 type ParamsRoutineCard = {
-  id : number
-  name : string;
-  exercisesLength : number;
-  exercises : {
+  id: number
+  name: string;
+  exercisesLength: number;
+  exercises: {
     id: string;
     name: string;
     group: string;
@@ -24,7 +24,7 @@ type ParamsRoutineCard = {
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>;
 
-export function RoutineCard({ id, name, exercises, exercisesLength} : ParamsRoutineCard) {
+export function RoutineCard({ id, name, exercises, exercisesLength }: ParamsRoutineCard) {
   const [isModalVisible, setModalVisible] = useState(false);
   const { navigate } = useNavigation<TypeNavigation>();
   const { setRoutineSelected } = useContextRoutine()
@@ -33,7 +33,7 @@ export function RoutineCard({ id, name, exercises, exercisesLength} : ParamsRout
     setModalVisible(!isModalVisible);
   }
 
-  function handleNavigateRoutine(){
+  function handleNavigateRoutine() {
     const routine = {
       id,
       name,
@@ -42,6 +42,11 @@ export function RoutineCard({ id, name, exercises, exercisesLength} : ParamsRout
     setRoutineSelected(routine);
     navigate("view-routine")
   }
+
+  function handleNavigateTrainingSession() {
+    navigate("training-session", { routineId: id });
+  }
+  
   return (
     <>
       <TouchableOpacity
@@ -54,10 +59,10 @@ export function RoutineCard({ id, name, exercises, exercisesLength} : ParamsRout
               {name}
             </Text>
             <Text style={styles.secondaryText} numberOfLines={1}>
-             {exercisesLength} exercícios
+              {exercisesLength} exercícios
             </Text>
           </View>
-          <TouchableOpacity style={styles.button} onPress={() => { }}>
+          <TouchableOpacity style={styles.button} onPress={handleNavigateTrainingSession}>
             <Text style={styles.buttonText}>Start</Text>
           </TouchableOpacity>
         </View>

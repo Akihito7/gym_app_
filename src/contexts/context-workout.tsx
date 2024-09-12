@@ -19,6 +19,12 @@ export type TypeWorkoutSession = {
         group: string;
         gif: string;
         description: string;
+        series : {
+            id : number,
+            order : number,
+            kg : number,
+            reps : number,
+        }
     }[]
 }
 
