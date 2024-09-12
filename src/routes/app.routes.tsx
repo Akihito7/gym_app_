@@ -9,6 +9,7 @@ import { ExerciseDetailsScreen } from "../screens/exercise-details-screen";
 import { ViewRoutineScreen } from "../screens/view-routine-screen";
 import { ProfileScreen } from "../screens/profile-screen";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { TrainingSessionScreen } from "../screens/training-session-screen";
 
 export type TypeAppRoutes = {
   "home": undefined;
@@ -27,6 +28,9 @@ export type TypeAppRoutes = {
   },
   "view-routine": undefined;
   "profile": undefined;
+  "training-session": {
+    routineId : number
+  };
 }
 const { Navigator, Screen } = createBottomTabNavigator<TypeAppRoutes>();
 
@@ -90,6 +94,14 @@ export function AppRoutes() {
               size={32}
               color={color} />
           )
+        }}
+      />
+
+      <Screen
+        name="training-session"
+        component={TrainingSessionScreen}
+        options={{
+          tabBarButton: () => null
         }}
       />
     </Navigator>
