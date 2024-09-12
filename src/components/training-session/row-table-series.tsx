@@ -14,7 +14,7 @@ type ParamsRowTableSeries = {
 }
 
 export function RowTableSeries({ exerciseId, id, order, repsInital, kgsInital }: ParamsRowTableSeries) {
-  const [editMode, setEditMode] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
   const [reps, setReps] = useState(repsInital);
   const [kgs, setKgs] = useState(kgsInital);
 
@@ -43,42 +43,43 @@ export function RowTableSeries({ exerciseId, id, order, repsInital, kgsInital }:
     }
   }
 
-  useEffect(() => {
-    console.log("as series mudaram =>", workoutSession.exercises[0].series)
-  }, [workoutSession])
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.primaryText}
-        keyboardType="number-pad"
-        maxLength={3}
-        readOnly={true}
-        value={String(order)}
-      />
-      <TextInput
-        style={styles.primaryText}
-        keyboardType="number-pad"
-        maxLength={3}
-        value={String(reps)}
-        onChangeText={(e) => setReps(Number(e))}
-      />
-      <TextInput
-        style={styles.primaryText}
-        keyboardType="number-pad"
-        maxLength={3}
-        value={String(kgs)}
-        onChangeText={(e) => setKgs(Number(e))}
-      />
-      <TouchableOpacity onPress={handleUpdateSeries}>
-        <FontAwesome5 name="save" size={24} color={defaultTheme.colors.primaryText} />
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity onLongPress={() => setIsFinished(prev => !prev)}>
+      <View style={{ ...styles.container, backgroundColor: isFinished ? defaultTheme.colors.backgroundComponents : "transparent" }}>
+        <TextInput
+          style={styles.primaryText}
+          keyboardType="number-pad"
+          maxLength={3}
+          readOnly={true}
+          value={String(order)}
+        />
+        <TextInput
+          style={styles.primaryText}
+          keyboardType="number-pad"
+          maxLength={3}
+          value={String(reps)}
+          onChangeText={(e) => setReps(Number(e))}
+        />
+        <TextInput
+          style={styles.primaryText}
+          keyboardType="number-pad"
+          maxLength={3}
+          value={String(kgs)}
+          onChangeText={(e) => setKgs(Number(e))}
+        />
+        <TouchableOpacity onPress={handleUpdateSeries}>
+          <FontAwesome5 name="save" size={24} color={defaultTheme.colors.primaryText} />
+        </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+    paddingHorizontal : 12,
+    paddingVertical : 6,
   },
   primaryText: {
     width: "30%",

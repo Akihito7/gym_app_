@@ -6,12 +6,12 @@ import { Feather } from "@expo/vector-icons"
 import { HeaderTableSeries } from "./header-table-series"
 import { RowTableSeries } from "./row-table-series"
 import { useContextWorkout } from "../../hooks/useContextWorkout"
-import { useEffect } from "react"
 
 type TypeExerciseTrainingCard = {
   exerciseId: number;
   exerciseName: string;
   group: string;
+  gif: string;
   series: {
     id: number;
     order: number;
@@ -19,7 +19,7 @@ type TypeExerciseTrainingCard = {
     kg: number
   }[]
 }
-export function ExerciseTrainingCard({ exerciseId, exerciseName, group, series }: TypeExerciseTrainingCard) {
+export function ExerciseTrainingCard({ exerciseId, exerciseName, group, gif, series }: TypeExerciseTrainingCard) {
   const { workoutSession, setWorkoutSession } = useContextWorkout();
 
   function handleAddNewSerieInExercise() {
@@ -50,50 +50,59 @@ export function ExerciseTrainingCard({ exerciseId, exerciseName, group, series }
     }
   }
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.containerExerciseInfo}>
-        <Avatar
-          source={ExerciseImg}
-          size={64}
-          avatarStyle={{ borderRadius: 10 }}
-        />
+  function handleDeleteExerciseInWorkoutSession() {
+    const updatedExercisesWorkout = workoutSession.exercises.filter(e => e.id != String(exerciseId));
+    const workoutUpdated = {
+      ...workoutSession,
+      exercises: updatedExercisesWorkout
+    }
+    setWorkoutSession(workoutUpdated)
+  }
 
-        <View style={styles.containerTextExercise} >
-          <Text style={styles.primaryText} numberOfLines={1}>Rosca com barra w</Text>
-          <Text style={styles.secondaryText}>Biceps</Text>
+  return (
+      <View style={styles.container}>
+        <View style={styles.containerExerciseInfo}>
+          <Avatar
+            source={{ uri: gif }}
+            size={64}
+            avatarStyle={{ borderRadius: 10 }}
+          />
+
+          <View style={styles.containerTextExercise} >
+            <Text style={styles.primaryText} numberOfLines={1}>{exerciseName}</Text>
+            <Text style={styles.secondaryText}>{group}</Text>
+          </View>
+
+          <TouchableOpacity onPress={handleDeleteExerciseInWorkoutSession}>
+            <Feather name="trash" size={28} color={defaultTheme.colors.defaultRed} />
+          </TouchableOpacity>
         </View>
 
-        <TouchableOpacity>
-          <Feather name="trash" size={28} color={defaultTheme.colors.defaultRed} />
+        <View style={styles.containerTable}>
+          <>
+            <HeaderTableSeries />
+            {
+              series.length > 0 && series.map(item => (
+                <RowTableSeries
+                  exerciseId={exerciseId}
+                  id={item.id}
+                  order={item.order}
+                  kgsInital={item.kg}
+                  repsInital={item.reps}
+                />
+              ))
+            }
+          </>
+
+        </View>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleAddNewSerieInExercise}
+        >
+          <Text style={styles.buttonText}>Nova serie</Text>
         </TouchableOpacity>
       </View>
-
-      <View style={styles.containerTable}>
-        <>
-          <HeaderTableSeries />
-          {
-            series.length > 0 && series.map(item => (
-              <RowTableSeries
-                exerciseId={exerciseId}
-                id={item.id}
-                order={item.order}
-                kgsInital={item.kg}
-                repsInital={item.reps}
-              />
-            ))
-          }
-        </>
-
-      </View>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleAddNewSerieInExercise}
-      >
-        <Text style={styles.buttonText}>Nova serie</Text>
-      </TouchableOpacity>
-    </View>
   )
 }
 
@@ -127,7 +136,6 @@ const styles = StyleSheet.create({
   },
   containerTable: {
     marginTop: 12,
-    gap: 8,
   },
   button: {
     width: "70%",

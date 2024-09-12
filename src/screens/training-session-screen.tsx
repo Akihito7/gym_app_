@@ -37,6 +37,7 @@ export function TrainingSessionScreen() {
             keyExtractor={item => String(item.id)}
             renderItem={({ item }) => (
               <ExerciseTrainingCard
+                gif={item.gif}
                 exerciseId={Number(item.id)}
                 group={item.group}
                 exerciseName={item.name}
@@ -47,7 +48,7 @@ export function TrainingSessionScreen() {
             showsVerticalScrollIndicator={false}
             style={{
               marginBottom: 42,
-              paddingBottom : 12,
+              paddingBottom: 12,
             }}
           />
 

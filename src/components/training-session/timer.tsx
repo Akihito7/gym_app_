@@ -6,7 +6,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 
 export function Timer() {
     const [timer, setTimer] = useState({ minutes: 0, seconds: 0 });
-    const [timerStatus, setTimerStatus] = useState(true);
+    const [timerStatus, setTimerStatus] = useState(false);
     useEffect(() => {
         const tick = () => {
             if (!timerStatus) return;

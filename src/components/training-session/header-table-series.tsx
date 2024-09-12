@@ -14,6 +14,8 @@ export function HeaderTableSeries() {
 const styles = StyleSheet.create({
     container: {
         flexDirection : "row",
+        paddingHorizontal : 12,
+        marginBottom : 8,
     },
     primaryText : {
         width : "30%",

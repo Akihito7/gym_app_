@@ -15,6 +15,7 @@ const exercises = [
   {
     "id": 1,
     "name": "Supino Reto",
+    "image" : "",
     "group": "Peito",
     "gif": "https://media1.tenor.com/m/oaRRq3lgB-wAAAAd/barbellbenchpress-gymexercisesmen.gif",
     "description": "Deite-se no banco, pés no chão. Segure a barra com as mãos na largura dos ombros. Abaixe a barra até o peito e levante-a de volta. Trabalha peito e tríceps."
