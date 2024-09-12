@@ -24,7 +24,7 @@ export type TypeWorkoutSession = {
             order : number,
             kg : number,
             reps : number,
-        }
+        }[]
     }[]
 }
 

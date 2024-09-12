@@ -43,7 +43,8 @@ export function ExerciseCatalogCard({ id, name, group, gif, description }: Param
       name,
       group,
       gif, 
-      description
+      description,
+      series : []
     }
 
     const alreadyIncludes = routineSelected!.exercises.filter(item => item.id === exercise.id);

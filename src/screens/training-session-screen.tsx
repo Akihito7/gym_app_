@@ -14,61 +14,61 @@ import { FlatList } from "react-native";
 type TrainingSessionScreen = RouteProp<TypeAppRoutes, 'training-session'>;
 
 export function TrainingSessionScreen() {
-    const route = useRoute<TrainingSessionScreen>();
-    const routineId = route.params.routineId;
-    const { routines } = useContextRoutine();
-    const { workoutSession, setWorkoutSession } = useContextWorkout()
+  const route = useRoute<TrainingSessionScreen>();
+  const routineId = route.params.routineId;
+  const { routines } = useContextRoutine();
+  const { workoutSession, setWorkoutSession } = useContextWorkout()
 
-    function setWorkoutFromRoutine() {
-        const workout = routines.find(item => item.id === routineId);
-        console.log(workout)
-    }
+  function setWorkoutFromRoutine() {
+    const workout = routines.find(item => item.id === routineId);
+    if (workout != undefined) setWorkoutSession(workout)
+  };
+  useEffect(() => {
+    setWorkoutFromRoutine();
+  }, [routineId])
+  return (
+    <View style={styles.container}>
+      <Header title="Sessão atual" />
+      <View style={styles.main}>
+        <Timer />
+        <View style={styles.containerExerciseTrainingCard}>
+          <FlatList
+            data={workoutSession.exercises}
+            keyExtractor={item => String(item.id)}
+            renderItem={({ item }) => (
+              <ExerciseTrainingCard
+                exerciseId={Number(item.id)}
+                group={item.group}
+                exerciseName={item.name}
+                series={item.series}
+              />
+            )}
+            ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
+            showsVerticalScrollIndicator={false}
+            style={{
+              marginBottom: 42,
+              paddingBottom : 12,
+            }}
+          />
 
-    useEffect(() => {
-        setWorkoutFromRoutine();
-    }, [routineId])
-    return (
-        <View style={styles.container}>
-            <Header title="Sessão atual" />
-            <View style={styles.main}>
-                <Timer />
-                <View style={styles.containerExerciseTrainingCard}>
-                {/*     <FlatList
-                        data={workoutSession.exercises}
-                        keyExtractor={item => String(item.id)}
-                        renderItem={({ item }) => (
-                            <ExerciseTrainingCard 
-                              id={Number(item.id)}
-                              group={item.group}
-                              name={item.name}
-                              series={item.series}
-                            />
-                        )}
-                        ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
-                        showsVerticalScrollIndicator={false}
-                        style={{
-                            marginBottom: 18,
-                        }}
-                    /> */}
-
-                </View>
-            </View>
         </View>
-    )
+      </View>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: defaultTheme.colors.backgroundScreen
-    },
-    main: {
-        flex: 1,
-        paddingHorizontal: 20,
-        marginBottom: 14,
-        paddingTop: 24,
-    },
-    containerExerciseTrainingCard: {
-        marginTop: 16,
-    }
+  container: {
+    flex: 1,
+    backgroundColor: defaultTheme.colors.backgroundScreen
+  },
+  main: {
+    flex: 1,
+    paddingHorizontal: 20,
+    marginBottom: 14,
+    paddingTop: 24,
+  },
+  containerExerciseTrainingCard: {
+    marginTop: 16,
+  }
 })
