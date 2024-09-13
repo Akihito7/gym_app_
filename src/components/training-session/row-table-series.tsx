@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet, Touchable, TouchableOpacity, TextInput } from "react-native";
+import { View, StyleSheet, TouchableOpacity, TextInput } from "react-native";
 import { defaultTheme } from "../../configs/default-theme";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import { useContextWorkout } from "../../hooks/useContextWorkout";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -17,12 +17,15 @@ export function RowTableSeries({ exerciseId, id, order, repsInital, kgsInital }:
   const [isFinished, setIsFinished] = useState(false);
   const [reps, setReps] = useState(repsInital);
   const [kgs, setKgs] = useState(kgsInital);
+  const [editMode, setEditMode] = useState(false);
 
   const { workoutSession, setWorkoutSession } = useContextWorkout();
 
   function handleUpdateSeries() {
+    if (!editMode) return setEditMode(true)
     const exercise = workoutSession.exercises.find(e => e.id === String(exerciseId));
     if (exercise) {
+
       const updatedSeries = exercise.series.map(serie =>
         serie.id === id ? { ...serie, kg: kgs, reps: reps } : serie
       );
@@ -38,6 +41,7 @@ export function RowTableSeries({ exerciseId, id, order, repsInital, kgsInital }:
         exercises: updatedExercises
       };
       setWorkoutSession(updateWorkout);
+      setEditMode(false)
     } else {
       console.error("Exercise not found with id:", exerciseId);
     }
@@ -59,6 +63,7 @@ export function RowTableSeries({ exerciseId, id, order, repsInital, kgsInital }:
           maxLength={3}
           value={String(reps)}
           onChangeText={(e) => setReps(Number(e))}
+          readOnly={editMode ? false : true}
         />
         <TextInput
           style={styles.primaryText}
@@ -66,9 +71,25 @@ export function RowTableSeries({ exerciseId, id, order, repsInital, kgsInital }:
           maxLength={3}
           value={String(kgs)}
           onChangeText={(e) => setKgs(Number(e))}
+          readOnly={editMode ? false : true}
         />
         <TouchableOpacity onPress={handleUpdateSeries}>
-          <FontAwesome5 name="save" size={24} color={defaultTheme.colors.primaryText} />
+          {
+            editMode ?
+              <FontAwesome5
+                name="save"
+                size={24}
+                color={defaultTheme.colors.secondaryText}
+              />
+              :
+              <Feather
+                name="edit"
+                size={24}
+                color={defaultTheme.colors.secondaryText}
+              />
+
+          }
+
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
@@ -78,8 +99,8 @@ export function RowTableSeries({ exerciseId, id, order, repsInital, kgsInital }:
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    paddingHorizontal : 12,
-    paddingVertical : 6,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
   },
   primaryText: {
     width: "30%",

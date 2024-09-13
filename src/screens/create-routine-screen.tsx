@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TypeAppRoutes } from "../routes/app.routes";
 import { HeaderCreateRoutine } from "../components/create-routine/header-create-routine";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { TypeRoutineSelected } from "../contexts/context-routine";

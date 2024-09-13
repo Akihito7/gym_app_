@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TypeAppRoutes } from "../routes/app.routes";
 import { FontAwesome } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 

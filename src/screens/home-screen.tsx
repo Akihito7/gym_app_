@@ -10,8 +10,6 @@ import { useContextRoutine } from "../hooks/useContextRoutine";
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
-/* const routines = [1, 2, 3, 4, 5, 6, 7]; */
-
 export function HomeScreen() {
   const { navigate } = useNavigation<TypeNavigation>();
   const { setRoutineSelected } = useContextRoutine();

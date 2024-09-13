@@ -1,7 +1,6 @@
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native"
 import { defaultTheme } from "../../configs/default-theme"
 import { Avatar } from "react-native-elements"
-import ExerciseImg from "../../../assets/biceps.png"
 import { Feather } from "@expo/vector-icons"
 import { HeaderTableSeries } from "./header-table-series"
 import { RowTableSeries } from "./row-table-series"
