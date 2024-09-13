@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import { defaultTheme } from "../configs/default-theme";
 
-export function HistoryWorkoutDetails(){
+export function HistoryTrainingSessionDetails(){
   return (
     <View>
 

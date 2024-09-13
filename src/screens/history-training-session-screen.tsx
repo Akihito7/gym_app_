@@ -1,8 +1,7 @@
 import { SectionList, StyleSheet, Text, View } from "react-native";
-import { HistoryCard } from "../components/history-screen/history-card";
+import { HistoryCard } from "../components/history-training-session/history-card";
 import { defaultTheme } from "../configs/default-theme";
 import { Header } from "../components/header";
-import { useEffect } from "react";
 
 const groupedData = [
   {
@@ -20,7 +19,7 @@ const groupedData = [
   },
 ];
 
-export function HistoryScreen() {
+export function HistoryTrainingSession() {
   return (
     <View style={styles.container}>
       <Header title="Historico" />

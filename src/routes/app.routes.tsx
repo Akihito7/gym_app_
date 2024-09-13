@@ -11,7 +11,7 @@ import { ProfileScreen } from "../screens/profile-screen";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { TrainingSessionScreen } from "../screens/training-session-screen";
 import { UpdateRoutineScreen } from "../screens/update-routine-screen";
-import { HistoryScreen } from "../screens/history-screen";
+import { HistoryTrainingSession } from "../screens/history-training-session-screen";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 export type TypeAppRoutes = {
@@ -35,7 +35,7 @@ export type TypeAppRoutes = {
     routineId: number
   };
   "update-routine": undefined;
-  "history": undefined;
+  "history-training-session": undefined;
 }
 const { Navigator, Screen } = createBottomTabNavigator<TypeAppRoutes>();
 
@@ -90,8 +90,8 @@ export function AppRoutes() {
         }}
       />
       <Screen
-        name="history"
-        component={HistoryScreen}
+        name="history-training-session"
+        component={HistoryTrainingSession}
         options={{
           tabBarIcon: ({ color }) => (
             <FontAwesome5

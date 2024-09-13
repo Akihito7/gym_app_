@@ -9,6 +9,11 @@ import { TypeAppRoutes } from "../routes/app.routes";
 import { FontAwesome } from "@expo/vector-icons";
 import { useState } from "react";
 
+
+/* 
+vou precisar receber um parametro na rota, sobre de qual rota veio pra essa, e dps passar iss para meus cards
+e com base nisso eu sei onde devo adicionar o exercicio, se e em uma rotina ou uma sessao e sei tbm para qual rota devo navegar depois
+*/
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
 const exercises = [
@@ -48,6 +53,10 @@ export function ExerciseCatalogScreen() {
   const { navigate } = useNavigation<TypeNavigation>();
 
   function handleNavigateToCreateRoutine() {
+    /* 
+    if(fromRoute === "training-session") navigate("training-session")
+    else navigate("create-routine")
+    */
     navigate("create-routine");
   };
 
@@ -79,6 +88,7 @@ export function ExerciseCatalogScreen() {
           keyExtractor={item => String(item.id)}
           renderItem={({ item }) => (
             <ExerciseCatalogCard
+            /* fromRoute={fromRoute} */
               key={item.id}
               id={item.id}
               name={item.name}

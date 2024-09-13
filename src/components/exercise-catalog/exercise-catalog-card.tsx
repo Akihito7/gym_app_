@@ -31,6 +31,9 @@ export function ExerciseCatalogCard({ id, name, group, gif, description }: Param
     else false
   };
 
+
+  /* from route, depois verificar  onde vamos adicionar o exercicio, basicamente e isso o fluxo */
+
   function CheckedExerciseRemovedFromRoutine() {
     const removed = routineSelected!.exercises.filter(item => item.id === String(id))
     if (removed!.length > 0) return;
@@ -38,13 +41,17 @@ export function ExerciseCatalogCard({ id, name, group, gif, description }: Param
   };
 
   function handleAddExerciseInRoutine() {
+
+    /* if(fromRoute === "training-session") add exercise in session training 
+    else keep same thing
+    */
     const exercise = {
       id: String(id),
       name,
       group,
-      gif, 
+      gif,
       description,
-      series : []
+      series: []
     }
 
     const alreadyIncludes = routineSelected!.exercises.filter(item => item.id === exercise.id);
@@ -71,16 +78,18 @@ export function ExerciseCatalogCard({ id, name, group, gif, description }: Param
     }
   }
 
+  /* function  handleAddExerciseInTrainingSession */
+
   function handleNavigateDetails() {
     navigate("exercise-details", {
       item: {
-        id : String(id),
+        id: String(id),
         name,
         group,
         gif,
         description
       },
-      fromRoute  : "exercise-catalog"
+      fromRoute: "exercise-catalog"
     })
   }
 
