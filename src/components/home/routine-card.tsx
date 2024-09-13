@@ -33,7 +33,7 @@ type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>;
 export function RoutineCard({ id, name, exercises, exercisesLength }: ParamsRoutineCard) {
   const [isModalVisible, setModalVisible] = useState(false);
   const { navigate } = useNavigation<TypeNavigation>();
-  const { setRoutineSelected } = useContextRoutine()
+  const { setRoutines, setRoutineSelected } = useContextRoutine()
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -52,7 +52,21 @@ export function RoutineCard({ id, name, exercises, exercisesLength }: ParamsRout
   function handleNavigateTrainingSession() {
     navigate("training-session", { routineId: id });
   }
-  
+
+  function handleNavigateUpdateRoutine() {
+    const routine = {
+      id,
+      name,
+      exercises
+    };
+    setRoutineSelected(routine);
+    navigate("update-routine")
+  }
+
+  function handleDeleteRoutine() {
+    setRoutines(prev => prev.filter(r => r.id != id));
+  }
+
   return (
     <>
       <TouchableOpacity
@@ -81,13 +95,13 @@ export function RoutineCard({ id, name, exercises, exercisesLength }: ParamsRout
       >
         <View style={styles.modalContent}>
           <Text style={styles.modalText}>Opções da Rotina</Text>
-          <TouchableOpacity onPress={() => console.log("Editar rotina")}>
+          <TouchableOpacity onPress={handleNavigateUpdateRoutine}>
             <View style={styles.containerOption}>
               <Feather name="edit" size={24} color={defaultTheme.colors.secondaryText} />
               <Text style={styles.optionText}>Editar</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => console.log("Excluir rotina")}>
+          <TouchableOpacity onPress={handleDeleteRoutine}>
             <View style={styles.containerOption}>
               <AntDesign name="delete" size={24} color={defaultTheme.colors.secondaryText} />
               <Text style={styles.optionText}>Excluir</Text>
