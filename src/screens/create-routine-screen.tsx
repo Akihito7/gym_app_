@@ -27,6 +27,7 @@ export function CreateRoutineScreen() {
     setStep(2)
   };
   function backStep() {
+    if(step === 1) return navigate("home");
     setStep(1)
   };
   function handleInputValue(value: string) {
