@@ -4,7 +4,7 @@ import { defaultTheme } from "../configs/default-theme"
 export function SignupScreen() {
   return (
     <View style={styles.container}>
-      
+        
     </View>
   )
 }

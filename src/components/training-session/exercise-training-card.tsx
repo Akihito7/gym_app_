@@ -23,7 +23,7 @@ export function ExerciseTrainingCard({ exerciseId, exerciseName, group, gif, ser
 
   function handleAddNewSerieInExercise() {
     const exercise = workoutSession.exercises.find(e => e.id === String(exerciseId));
-
+      
     if (exercise) {
       const newSeries = {
         id: exercise.series.length + 1,

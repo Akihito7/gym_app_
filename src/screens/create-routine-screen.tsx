@@ -19,7 +19,7 @@ export function CreateRoutineScreen() {
   const [searchInputValue, setSearchInputValue] = useState("");
   const [routineName, setRoutineName] = useState("");
   const { navigate } = useNavigation<TypeNavigation>();
-  const { routineSelected, setRoutineSelected, setRoutines } = useContextRoutine()
+  const { routines, routineSelected, setRoutineSelected, setRoutines } = useContextRoutine()
 
   const [step, setStep] = useState<TypeStep>(1);
 
@@ -40,7 +40,7 @@ export function CreateRoutineScreen() {
   function handleCreateRoutine() {
     const newRoutine = {
       ...routineSelected,
-      id: 1,
+      id: routines.length + 1,
       name: routineName
     } as TypeRoutineSelected;
     setStep(1);
