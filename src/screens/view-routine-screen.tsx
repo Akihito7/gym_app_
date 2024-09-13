@@ -5,9 +5,19 @@ import { Input } from "../components/input";
 import { FontAwesome } from "@expo/vector-icons";
 import { useContextRoutine } from "../hooks/useContextRoutine";
 import { ExerciseViewRoutineCard } from "../components/view-routine/exercise-view-routine-card";
+import { useNavigation } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { TypeAppRoutes } from "../routes/app.routes";
+
+type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>;
 
 export function ViewRoutineScreen() {
   const { routineSelected } = useContextRoutine();
+  const { navigate } = useNavigation<TypeNavigation>();
+
+  function handleNavigateTrainingSession() {
+    navigate("training-session", { routineId: routineSelected?.id ?? 0 });
+  }
 
   return (
     <View style={styles.container}>
@@ -42,7 +52,10 @@ export function ViewRoutineScreen() {
           }}
         />
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleNavigateTrainingSession}
+        >
           <Text style={styles.buttonText}>Iniciar Treino</Text>
         </TouchableOpacity>
       </View>
