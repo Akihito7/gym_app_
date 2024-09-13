@@ -2,11 +2,20 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native"
 import { defaultTheme } from "../../configs/default-theme"
 import { View } from "react-native"
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { TypeAppRoutes } from "../../routes/app.routes";
+import { useNavigation } from "@react-navigation/native";
 
 type TypeHeaderUpdateRoutine = {
   handleUpdateRoutine(): void;
 }
+type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
+
 export function HeaderUpdateRoutine({ handleUpdateRoutine }: TypeHeaderUpdateRoutine) {
+  const { navigate } = useNavigation<TypeNavigation>();
+  function handleNavigateToHome() {
+    navigate("home")
+  }
   return (
     <View style={styles.container}>
       <TouchableOpacity>
@@ -16,11 +25,11 @@ export function HeaderUpdateRoutine({ handleUpdateRoutine }: TypeHeaderUpdateRou
           color={defaultTheme.colors.primaryText}
         />
       </TouchableOpacity>
-
       <Text style={styles.title}>Editar rotina</Text>
-
-
-      <TouchableOpacity onPress={handleUpdateRoutine}>
+      <TouchableOpacity onPress={() => {
+        handleUpdateRoutine()
+        handleNavigateToHome()
+      }}>
         <AntDesign
           name="check"
           size={32}

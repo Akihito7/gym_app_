@@ -5,18 +5,47 @@ import { InputUpdateRoutine } from "../components/update-routine/input-update-ro
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons"
 import { ExerciseUpdateRoutineCard } from "../components/update-routine/exercise-update-routine-card"
 import { useContextRoutine } from "../hooks/useContextRoutine"
+import { useState } from "react"
 
 export function UpdateRoutineScreen() {
 
-  const { routineSelected } = useContextRoutine();
+  const { routineSelected, setRoutineSelected, setRoutines, routines } = useContextRoutine();
+  const [routineName, setRoutineName] = useState(routineSelected?.name);
+
+  function handleRoutineName(value: string) {
+    setRoutineName(value)
+  };
+
+  function handleSetNameRoutine() {
+    setRoutineSelected(prev => {
+      return {
+        ...prev,
+        name: routineName ?? ""
+      }
+    })
+
+    const routinesUpdated = routines.map(r => {
+      if (r.id === routineSelected?.id) return {
+        ...r,
+        name: routineName ?? ""
+      }
+      return r
+    })
+    setRoutines(routinesUpdated)
+  }
 
   return (
     <View style={styles.container}>
-      <HeaderUpdateRoutine handleUpdateRoutine={() => { }} />
-
+      <HeaderUpdateRoutine
+        handleUpdateRoutine={handleSetNameRoutine}
+      />
       <View style={styles.main}>
         <View style={styles.containerInputs}>
-          <InputUpdateRoutine value="AIN">
+          <InputUpdateRoutine
+            value={routineName ?? ""}
+            onChangeText={handleRoutineName}
+
+          >
             <MaterialIcons
               name="drive-file-rename-outline"
               size={32}
