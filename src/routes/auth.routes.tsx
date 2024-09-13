@@ -3,7 +3,10 @@ import { SignlnScreen } from "../screens/signln-screen";
 import { SignupScreen } from "../screens/signup-screen";
 
 const { Navigator, Screen } = createStackNavigator();
-
+export type TypeAuthRoutes = {
+  signln : undefined;
+  signup : undefined;
+}
 export function AuthRoutes() {
   return (
     <Navigator screenOptions={{
