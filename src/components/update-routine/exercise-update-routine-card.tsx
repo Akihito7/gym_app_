@@ -7,6 +7,7 @@ import { useContextRoutine } from "../../hooks/useContextRoutine";
 import { useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TypeAppRoutes } from "../../routes/app.routes";
+import { apiDeleteExerciseFromRoutine } from "../../api/delete-exercise-from-routine";
 
 type ParamsExerciseCard = {
   id: string;
@@ -19,10 +20,12 @@ type ParamsExerciseCard = {
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
 export function ExerciseUpdateRoutineCard({ id, name, group, gif, description }: ParamsExerciseCard) {
-  const { setRoutines, routines, routineSelected, setRoutineSelected } = useContextRoutine();
+  const { setRoutines, routines, routineSelected, setRoutineSelected, setExercisesRemoved } = useContextRoutine();
   const { navigate } = useNavigation<TypeNavigation>()
 
-  function handleRemoveExerciseSelected() {
+  async function handleRemoveExerciseSelected() {
+    apiDeleteExerciseFromRoutine(Number(id));
+    /* setExercisesRemoved(prev => [...prev, Number(id)]); */
     const routinesUpdated = routines.map(r => {
       if(r.id != routineSelected!.id) return r
       return {

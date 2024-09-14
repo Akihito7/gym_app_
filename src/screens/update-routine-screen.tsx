@@ -5,11 +5,11 @@ import { InputUpdateRoutine } from "../components/update-routine/input-update-ro
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons"
 import { ExerciseUpdateRoutineCard } from "../components/update-routine/exercise-update-routine-card"
 import { useContextRoutine } from "../hooks/useContextRoutine"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export function UpdateRoutineScreen() {
 
-  const { routineSelected, setRoutineSelected, setRoutines, routines } = useContextRoutine();
+  const { routineSelected, setRoutineSelected, setRoutines, routines, exercisesRemoved } = useContextRoutine();
   const [routineName, setRoutineName] = useState(routineSelected?.name);
 
   function handleRoutineName(value: string) {
@@ -33,6 +33,10 @@ export function UpdateRoutineScreen() {
     })
     setRoutines(routinesUpdated)
   }
+
+  useEffect(() => {
+    console.log("removed exercises => ", exercisesRemoved )
+  }, [exercisesRemoved])
 
   return (
     <View style={styles.container}>
