@@ -16,16 +16,16 @@ export function ExerciseDetailsScreen() {
 
   function handleNavigateBack() {
     if (fromRoute === 'exercise-catalog') navigate("exercise-catalog");
-    if(fromRoute === 'view-routine') navigate("view-routine");
+    if (fromRoute === 'view-routine') navigate("view-routine");
     else navigate("create-routine");
   }
-  
+
   return (
     <View style={styles.container}>
       <Header title="Detalhes" />
       <ScrollView>
         <Image
-          source={{ uri: item.gif }}
+          source={{ uri: `https://drive.google.com/uc?export=view&id=${item.gif}` }}
           style={{
             width: "100%",
             height: 400,

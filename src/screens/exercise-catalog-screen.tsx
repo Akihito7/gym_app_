@@ -7,7 +7,9 @@ import { useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TypeAppRoutes } from "../routes/app.routes";
 import { FontAwesome } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { apiGetManyExercises } from "../api/get-many-exercises";
+import { ExerciseDTO } from "../dtos/exercise-DTO";
 
 
 /* 
@@ -16,41 +18,11 @@ e com base nisso eu sei onde devo adicionar o exercicio, se e em uma rotina ou u
 */
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
-const exercises = [
-  {
-    "id": 1,
-    "name": "Supino Reto",
-    "image" : "",
-    "group": "Peito",
-    "gif": "https://media1.tenor.com/m/oaRRq3lgB-wAAAAd/barbellbenchpress-gymexercisesmen.gif",
-    "description": "Deite-se no banco, pés no chão. Segure a barra com as mãos na largura dos ombros. Abaixe a barra até o peito e levante-a de volta. Trabalha peito e tríceps."
-  },
-  {
-    "id": 2,
-    "name": "Agachamento",
-    "group": "Pernas",
-    "gif": "https://media1.tenor.com/m/pdMmsiutWkcAAAAC/gym.gif",
-    "description": "Fique em pé com os pés na largura dos ombros e a barra sobre os ombros. Agache até as coxas ficarem paralelas ao chão, e depois levante-se. Fortalece pernas e glúteos."
-  },
-  {
-    "id": 3,
-    "name": "Remada com Barra",
-    "group": "Costas",
-    "gif": "https://media1.tenor.com/m/AYJ_bNXDvoUAAAAC/workout-muscles.gif",
-    "description": "Incline o tronco para frente, mantendo as costas retas. Segure a barra com as mãos na largura dos ombros. Puxe a barra em direção ao abdômen e retorne. Foca nas costas e bíceps."
-  },
-  {
-    "id": 4,
-    "name": "Rosca Direta",
-    "group": "Bíceps",
-    "gif": "https://media1.tenor.com/m/m2Dfyh507FQAAAAC/8preacher-curl.gif",
-    "description": "Fique em pé com os pés na largura dos ombros. Segure a barra com as mãos na largura dos ombros. Dobre os cotovelos e levante a barra até a altura dos ombros. Trabalha os bíceps."
-  }
-];
 
 export function ExerciseCatalogScreen() {
   const [searchInputValue, setSearchInputValue] = useState("");
   const { navigate } = useNavigation<TypeNavigation>();
+  const [exercises, setExercises] = useState<ExerciseDTO[]>([])
 
   function handleNavigateToCreateRoutine() {
     /* 
@@ -63,6 +35,14 @@ export function ExerciseCatalogScreen() {
   function handleInputValue(value: string) {
     setSearchInputValue(value)
   }
+
+  useEffect(() => {
+    async function getManyExercises() {
+      const response = await apiGetManyExercises();
+      setExercises(response)
+    }
+    getManyExercises();
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -78,7 +58,7 @@ export function ExerciseCatalogScreen() {
             color={defaultTheme.colors.primaryText}
           />
         </Input>
-        
+
         <FlatList
           data={
             searchInputValue
@@ -88,12 +68,13 @@ export function ExerciseCatalogScreen() {
           keyExtractor={item => String(item.id)}
           renderItem={({ item }) => (
             <ExerciseCatalogCard
-            /* fromRoute={fromRoute} */
+              /* fromRoute={fromRoute} */
               key={item.id}
               id={item.id}
               name={item.name}
-              group={item.group}
-              gif={item.gif}
+              img={item.img_url}
+              group={item.muscle_group}
+              gif={item.gif_url}
               description={item.description}
             />)}
           ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}

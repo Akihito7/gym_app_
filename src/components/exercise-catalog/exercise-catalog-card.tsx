@@ -1,7 +1,6 @@
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { defaultTheme } from "../../configs/default-theme";
 import { Avatar } from "react-native-elements";
-import ExerciseImg from "../../../assets/biceps.png"
 import { CheckBox } from "react-native-elements";
 import { useEffect, useState } from "react";
 import { useContextRoutine } from "../../hooks/useContextRoutine";
@@ -13,13 +12,14 @@ type ParamsExerciseCard = {
   id: number;
   name: string;
   group: string;
+  img : string;
   gif: string;
   description: string;
 }
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
-export function ExerciseCatalogCard({ id, name, group, gif, description }: ParamsExerciseCard) {
+export function ExerciseCatalogCard({ id, name, group, img, gif, description }: ParamsExerciseCard) {
 
   const { routineSelected, setRoutineSelected } = useContextRoutine();
   const [checked, setChecked] = useState(checkedInitialState(id));
@@ -101,7 +101,7 @@ export function ExerciseCatalogCard({ id, name, group, gif, description }: Param
     <TouchableOpacity onPress={handleNavigateDetails}>
       <View style={styles.container}>
         <Avatar
-          source={ExerciseImg}
+          source={{ uri: `https://drive.google.com/uc?export=view&id=${img}` }}
           size={64}
           avatarStyle={{ borderRadius: 10 }}
         />
