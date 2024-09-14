@@ -7,15 +7,44 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { TypeAuthRoutes } from "../routes/auth.routes"
 import { useNavigation } from "@react-navigation/native"
+import { useForm, Controller } from "react-hook-form"
+import { InputErroMessage } from "../components/input-error-message"
+import * as Yup from "yup"
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useContextUser } from "../hooks/useContextUser"
+import { useContextMessage } from "../hooks/useContextMessage"
+import { ModalMessage } from "../components/modal-message"
 
+const schema = Yup.object({
+  email: Yup.string().email("Preencha com email válido").required("Email é obrigátorio"),
+  password: Yup.string().min(8, "Pelo menos 8 caracteres").required("Senha é obrigátorio")
+});
 
 type TypeNavigation = StackNavigationProp<TypeAuthRoutes>
 
+type ParamsUseForm = {
+  email : string;
+  password : string
+}
+
 export function SignlnScreen() {
   const { navigate } = useNavigation<TypeNavigation>();
+  const { handleSubmit, control, formState: { errors } } = useForm<ParamsUseForm>({
+    resolver: yupResolver(schema)
+  });
+
+  const { setMessage, message } = useContextMessage()
+
+  const { signln } = useContextUser()
+
   function handleNavigateSignup() {
     navigate("signup")
   }
+
+  function handleLogin({email, password} : ParamsUseForm){
+    signln({email, password})
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.main}>
@@ -35,15 +64,53 @@ export function SignlnScreen() {
 
         <View style={styles.containerInputs}>
 
-          <Input placeholder="Email">
-            <MaterialIcons name="email" size={24} color={defaultTheme.colors.secondaryText} />
-          </Input>
+          <Controller
+            name="email"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <>
+                <Input
+                  placeholder="Email"
+                  onChangeText={onChange}
+                  value={value}
+                >
+                  <MaterialIcons
+                    name="email"
+                    size={24}
+                    color={defaultTheme.colors.secondaryText}
+                  />
+                </Input>
+                {errors.email?.message && <InputErroMessage message={errors.email.message} />}
+              </>
+            )}
+          />
 
-          <Input placeholder="Senha">
-            <FontAwesome name="lock" size={30} color={defaultTheme.colors.secondaryText} />
-          </Input>
 
-          <TouchableOpacity style={styles.buttonLogin}>
+          <Controller
+            name="password"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <>
+                <Input
+                  placeholder="Senha"
+                  onChangeText={onChange}
+                  value={value}
+                  secureTextEntry
+                >
+                  <FontAwesome
+                    name="lock"
+                    size={30}
+                    color={defaultTheme.colors.secondaryText}
+                  />
+                </Input>
+                {errors.password?.message && <InputErroMessage message={errors.password.message} />}
+              </>
+            )}
+          />
+          <TouchableOpacity
+           style={styles.buttonLogin}
+           onPress={handleSubmit(handleLogin)}
+           >
             <Text style={styles.buttonText}>Entrar</Text>
           </TouchableOpacity>
           <View style={{ flex: 1 }}>
@@ -60,6 +127,7 @@ export function SignlnScreen() {
           </TouchableOpacity>
         </View>
       </View>
+      {message.message && <ModalMessage />}
     </View>
   )
 }
