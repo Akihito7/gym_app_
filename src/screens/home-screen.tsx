@@ -7,13 +7,18 @@ import { useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
 import { TypeAppRoutes } from "../routes/app.routes";
 import { useContextRoutine } from "../hooks/useContextRoutine";
+import { apiGetUser } from "../api/get-user";
+import { useEffect } from "react";
+import { useContextUser } from "../hooks/useContextUser";
+import { UserDTO } from "../dtos/user-DTO";
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
 export function HomeScreen() {
   const { navigate } = useNavigation<TypeNavigation>();
   const { setRoutineSelected } = useContextRoutine();
-  const { routines } = useContextRoutine()
+  const { routines } = useContextRoutine();
+  const { setUser } = useContextUser()
 
   function handleNavagiteToCreateRoutineAndSetRoutineContext() {
     setRoutineSelected({
@@ -23,6 +28,16 @@ export function HomeScreen() {
     });
     navigate("create-routine");
   }
+
+  async function getUser(){
+    const user : UserDTO = await apiGetUser()
+    setUser(user);
+    console.log(user)
+  }
+
+  useEffect(() => {
+    getUser()
+  },[])
 
   return (
     <View style={styles.container}>

@@ -67,6 +67,7 @@ export function ContextUserProvider({ children }: TypeContextProvider) {
   async function tryLoginWithLocalAsyncStorage() {
     const token = await AsyncStorage.getItem('token'); 
     if(!token) return;
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`
     setToken(token)
   }
 

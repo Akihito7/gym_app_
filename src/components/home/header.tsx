@@ -3,22 +3,32 @@ import { defaultTheme } from "../../configs/default-theme";
 import { Avatar } from "react-native-elements";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useContextUser } from "../../hooks/useContextUser";
+import { AvatarInitals } from "../avatar-initials";
 
 export function Header() {
-  const { logout } = useContextUser();
+  const { logout, user } = useContextUser();
   return (
     <View style={styles.container}>
+
       <TouchableOpacity>
-        <Avatar
-          size={64}
-          source={{ uri: "https://avatars.githubusercontent.com/u/121524719?v=4" }}
-          rounded
-          containerStyle={{ marginRight: 16 }}
-        />
+        {
+          user.url_photo && (
+            <Avatar
+              size={64}
+              source={{ uri: "https://avatars.githubusercontent.com/u/121524719?v=4" }}
+              rounded
+              containerStyle={{ marginRight: 12 }}
+            />
+          )
+        }
+
+        {!user.url_photo && user.username && (
+          <AvatarInitals />)
+        }
       </TouchableOpacity>
       <Text
         style={styles.title}>
-        Hi, Akihito 👋
+        Hi, {user.username} 👋
       </Text>
       <TouchableOpacity onPress={logout}>
         <MaterialIcons
