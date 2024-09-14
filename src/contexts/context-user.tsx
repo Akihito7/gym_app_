@@ -1,5 +1,7 @@
 import { createContext, SetStateAction, useState } from "react";
 import { UserDTO } from "../dtos/user-DTO";
+import { apiSignup } from "../api/signup";
+import { useContextMessage } from "../hooks/useContextMessage";
 
 
 type TypeContextUser = {
@@ -7,7 +9,7 @@ type TypeContextUser = {
   setUser: React.Dispatch<SetStateAction<UserDTO>>
   token: string,
   setToken: React.Dispatch<SetStateAction<string>>
-  signup : ({email, password} : ParamsSignup) => void;
+  signup: ({ username, email, password }: ParamsSignup) => void;
 }
 export const ContextUser = createContext({} as TypeContextUser)
 
@@ -16,15 +18,17 @@ type TypeContextProvider = {
 }
 
 type ParamsSignup = {
-  email : string;
-  password : string;
+  username: string;
+  email: string;
+  password: string;
 }
 export function ContextUserProvider({ children }: TypeContextProvider) {
   const [user, setUser] = useState({} as UserDTO);
   const [token, setToken] = useState("");
 
-  async function signup({ email, password} : ParamsSignup){
-    
+
+  async function signup({ username, email, password }: ParamsSignup) {
+     return apiSignup({ username, email, password });
   }
 
   return (

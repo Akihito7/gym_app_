@@ -8,13 +8,60 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { TypeAuthRoutes } from "../routes/auth.routes"
 import { useNavigation } from "@react-navigation/native"
+import { useContextUser } from "../hooks/useContextUser"
+import { useForm, Controller } from "react-hook-form"
+import * as Yup from "yup"
+import { yupResolver } from '@hookform/resolvers/yup';
+import { InputErroMessage } from "../components/input-error-message"
+import { ModalMessage } from "../components/modal-message"
+import { useContextMessage } from "../hooks/useContextMessage"
+import { apiSignup } from "../api/signup"
 
+
+const schema = Yup.object({
+  username: Yup.string().required("Username é obrigátorio").min(8, "Pelo menos 8 caracteres"),
+  email: Yup.string().email("Preencha com email válido").required("Email é obrigátorio"),
+  password: Yup.string().min(8, "Pelo menos 8 caracteres").required("Senha é obrigátorio")
+});
+
+type ParamsUseForm = {
+  username: string;
+  email: string;
+  password: string
+}
 type TypeNavigation = StackNavigationProp<TypeAuthRoutes>
+
 export function SignupScreen() {
+
   const { navigate } = useNavigation<TypeNavigation>();
+  const { signup } = useContextUser();
+  const { handleSubmit, control, formState: { errors } } = useForm<ParamsUseForm>({
+    resolver: yupResolver(schema)
+  })
+  
+  const { message,setMessage } = useContextMessage()
+
   function handleNavigateSignln() {
     navigate("signln")
   };
+
+  async function handleCreateAccount({ username, email, password }: ParamsUseForm) {
+    try {
+      signup({ username, email, password })
+      setMessage({
+        message: "Conta criada com sucesso",
+        type: "sucess"
+      });
+      
+      
+    } catch (error: any) {
+      setMessage({
+        message: error.message,
+        type: "failure"
+      })
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.main}>
@@ -34,32 +81,75 @@ export function SignupScreen() {
 
         <View style={styles.containerInputs}>
 
-          <Input placeholder="Username">
-            <Person
-              width={24}
-              height={24}
-              fill={defaultTheme.colors.secondaryText}
-            />
-          </Input>
+          <Controller
+            name="username"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <>
+                <Input
+                  placeholder="Username"
+                  onChangeText={onChange}
+                  value={value}
+                >
+                  <Person
+                    width={24}
+                    height={24}
+                    fill={defaultTheme.colors.secondaryText}
+                  />
+                </Input>
+                {errors.username?.message && <InputErroMessage message={errors.username.message} />}
+              </>
+            )}
+          />
 
-          <Input placeholder="Email">
-            <MaterialIcons
-              name="email"
-              size={24}
-              color={defaultTheme.colors.secondaryText}
-            />
-          </Input>
+          <Controller
+            name="email"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <>
+                <Input
+                  placeholder="Email"
+                  onChangeText={onChange}
+                  value={value}
+                >
+                  <MaterialIcons
+                    name="email"
+                    size={24}
+                    color={defaultTheme.colors.secondaryText}
+                  />
+                </Input>
+                {errors.email?.message && <InputErroMessage message={errors.email.message} />}
+              </>
+            )}
+          />
 
-          <Input placeholder="Senha">
-            <FontAwesome
-              name="lock"
-              size={30}
-              color={defaultTheme.colors.secondaryText}
-            />
-          </Input>
+          <Controller
+            name="password"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <>
+                <Input
+                  placeholder="Senha"
+                  onChangeText={onChange}
+                  value={value}
+                  secureTextEntry
+                >
+                  <FontAwesome
+                    name="lock"
+                    size={30}
+                    color={defaultTheme.colors.secondaryText}
+                  />
+                </Input>
+                {errors.password?.message && <InputErroMessage message={errors.password.message} />}
+              </>
+            )}
+          />
 
           <View style={{ flex: 1, width: "100%" }}>
-            <TouchableOpacity style={styles.buttonLogin}>
+            <TouchableOpacity
+              style={styles.buttonLogin}
+              onPress={handleSubmit(handleCreateAccount)}
+            >
               <Text style={styles.buttonText}>Criar conta</Text>
             </TouchableOpacity>
           </View>
@@ -76,6 +166,7 @@ export function SignupScreen() {
           </TouchableOpacity>
         </View>
       </View>
+      {message.message && <ModalMessage />}
     </View>
   )
 }
