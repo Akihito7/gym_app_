@@ -11,13 +11,13 @@ import { apiGetUser } from "../api/get-user";
 import { useEffect } from "react";
 import { useContextUser } from "../hooks/useContextUser";
 import { UserDTO } from "../dtos/user-DTO";
+import { apiGetManyRoutines } from "../api/get-many-routines";
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
 export function HomeScreen() {
   const { navigate } = useNavigation<TypeNavigation>();
-  const { setRoutineSelected } = useContextRoutine();
-  const { routines } = useContextRoutine();
+  const { setRoutineSelected, routines, setRoutines } = useContextRoutine();
   const { setUser } = useContextUser()
 
   function handleNavagiteToCreateRoutineAndSetRoutineContext() {
@@ -34,8 +34,14 @@ export function HomeScreen() {
     setUser(user);
   }
 
+  async function getManyRoutines(){
+    const routines = await apiGetManyRoutines();
+    setRoutines(routines)
+  }
+
   useEffect(() => {
     getUser()
+    getManyRoutines()
   },[])
 
   return (
