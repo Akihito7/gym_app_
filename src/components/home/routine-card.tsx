@@ -8,6 +8,7 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TypeAppRoutes } from "../../routes/app.routes";
 import { useNavigation } from "@react-navigation/native";
 import { useContextRoutine } from "../../hooks/useContextRoutine";
+import { apiDeleteRoutine } from "../../api/delete-routine";
 
 type ParamsRoutineCard = {
   id: number
@@ -63,7 +64,8 @@ export function RoutineCard({ id, name, exercises, exercisesLength }: ParamsRout
     navigate("update-routine")
   }
 
-  function handleDeleteRoutine() {
+  async function handleDeleteRoutine() {
+    await apiDeleteRoutine(id);
     setRoutines(prev => prev.filter(r => r.id != id));
   }
 
