@@ -1,9 +1,10 @@
-import { createContext, SetStateAction, useState } from "react";
+import { createContext, SetStateAction, useEffect, useState } from "react";
 import { UserDTO } from "../dtos/user-DTO";
 import { apiSignup } from "../api/signup";
 import { useContextMessage } from "../hooks/useContextMessage";
 import { apiSignln } from "../api/signln";
 import { api } from "../services/axios";
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 
 type TypeContextUser = {
@@ -13,6 +14,7 @@ type TypeContextUser = {
   setToken: React.Dispatch<SetStateAction<string>>
   signup: ({ username, email, password }: ParamsSignup) => void;
   signln: ({ email, password }: ParamsSignln) => void;
+  logout() : void;
 }
 export const ContextUser = createContext({} as TypeContextUser)
 
@@ -31,9 +33,10 @@ type ParamsSignln = {
   password: string;
 }
 export function ContextUserProvider({ children }: TypeContextProvider) {
+
   const [user, setUser] = useState({} as UserDTO);
   const [token, setToken] = useState("");
-  const { setMessage } = useContextMessage()
+  const { setMessage } = useContextMessage();
 
 
   async function signup({ username, email, password }: ParamsSignup) {
@@ -46,6 +49,7 @@ export function ContextUserProvider({ children }: TypeContextProvider) {
       const token = response.token;
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`
       setToken(token);
+      await AsyncStorage.setItem('token', token);
     } catch (error: any) {
       setMessage({
         message: error.message,
@@ -54,6 +58,22 @@ export function ContextUserProvider({ children }: TypeContextProvider) {
     }
   }
 
+  async function logout(){
+    await AsyncStorage.removeItem("token");
+    setToken("");
+    setUser({} as UserDTO)
+  }
+
+  async function tryLoginWithLocalAsyncStorage() {
+    const token = await AsyncStorage.getItem('token'); 
+    if(!token) return;
+    setToken(token)
+  }
+
+  useEffect(() => {
+    tryLoginWithLocalAsyncStorage()
+  }, [])
+
   return (
     <ContextUser.Provider value={{
       user,
@@ -61,7 +81,8 @@ export function ContextUserProvider({ children }: TypeContextProvider) {
       token,
       setToken,
       signup,
-      signln
+      signln,
+      logout,
     }}>
       {children}
     </ContextUser.Provider>
