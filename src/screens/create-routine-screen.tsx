@@ -11,9 +11,25 @@ import { useState } from "react";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { TypeRoutineSelected } from "../contexts/context-routine";
+import { apiCreateRoutine } from "../api/create-routine";
+import { apiInsertExerciseInRoutine } from "../api/insert-exercise-in-routine";
 
 type TypeStep = 1 | 2
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
+
+type Exercises = {
+    id: string;
+    name: string;
+    group: string;
+    gif: string;
+    description: string;
+    series: {
+      id: number,
+      order: number,
+      kg: number,
+      reps: number,
+    }[]
+}
 
 export function CreateRoutineScreen() {
   const [searchInputValue, setSearchInputValue] = useState("");
@@ -38,12 +54,20 @@ export function CreateRoutineScreen() {
     setRoutineName(value);
   }
 
-  function handleCreateRoutine() {
+  async function handleCreateRoutine() {
+    const routineId = await apiCreateRoutine({routineName})
     const newRoutine = {
       ...routineSelected,
-      id: routines.length + 1,
+      id: routineId,
       name: routineName
     } as TypeRoutineSelected;
+    const saveExercises = async (exercises: Exercises[]) => {
+      const promises = exercises.map((exercise, index) =>
+        apiInsertExerciseInRoutine({routineId, exerciseId : Number(exercise.id), order : index})
+      );
+      await Promise.all(promises);
+    };
+    saveExercises(newRoutine.exercises)
     setStep(1);
     setRoutines(prev => [...prev, newRoutine]);
     setRoutineName("");

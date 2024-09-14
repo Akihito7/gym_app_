@@ -32,7 +32,6 @@ export function HomeScreen() {
   async function getUser(){
     const user : UserDTO = await apiGetUser()
     setUser(user);
-    console.log(user)
   }
 
   useEffect(() => {
