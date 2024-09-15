@@ -56,7 +56,6 @@ export function RoutineCard({ id, name, exercises, exercisesLength }: ParamsRout
   }
 
   function handleNavigateUpdateRoutine() {
-    console.log("EU SOU A ROTINA", exercises)
     const routine = {
       id,
       name,

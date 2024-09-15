@@ -10,6 +10,7 @@ import { TypeAppRoutes } from "../../routes/app.routes";
 import { apiDeleteExerciseFromRoutine } from "../../api/delete-exercise-from-routine";
 
 type ParamsExerciseCard = {
+  exercise_id_in_exercises : number,
   id: string;
   name: string;
   group: string;
@@ -19,12 +20,12 @@ type ParamsExerciseCard = {
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
-export function ExerciseUpdateRoutineCard({ id, name, group, gif, description }: ParamsExerciseCard) {
+export function ExerciseUpdateRoutineCard({ exercise_id_in_exercises, id, name, group, gif, description }: ParamsExerciseCard) {
   const { setRoutines, routines, routineSelected, setRoutineSelected, setExercisesRemoved } = useContextRoutine();
   const { navigate } = useNavigation<TypeNavigation>()
 
   async function handleRemoveExerciseSelected() {
-    apiDeleteExerciseFromRoutine(Number(id));
+    await apiDeleteExerciseFromRoutine(Number(id));
     /* setExercisesRemoved(prev => [...prev, Number(id)]); */
     const routinesUpdated = routines.map(r => {
       if(r.id != routineSelected!.id) return r

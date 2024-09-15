@@ -68,7 +68,6 @@ export function ExerciseCatalogScreen() {
           keyExtractor={item => String(item.id)}
           renderItem={({ item }) => (
             <ExerciseCatalogCard
-              /* fromRoute={fromRoute} */
               key={item.id}
               id={item.id}
               name={item.name}

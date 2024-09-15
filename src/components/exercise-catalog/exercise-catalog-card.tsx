@@ -7,6 +7,7 @@ import { useContextRoutine } from "../../hooks/useContextRoutine";
 import { useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TypeAppRoutes } from "../../routes/app.routes";
+import { apiInsertExerciseInRoutine } from "../../api/insert-exercise-in-routine";
 
 type ParamsExerciseCard = {
   id: number;
@@ -20,7 +21,7 @@ type ParamsExerciseCard = {
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
 export function ExerciseCatalogCard({ id, name, group, img, gif, description }: ParamsExerciseCard) {
-  
+
   const { routineSelected, setRoutineSelected } = useContextRoutine();
 
   const [checked, setChecked] = useState(checkedInitialState(id));
@@ -32,7 +33,7 @@ export function ExerciseCatalogCard({ id, name, group, img, gif, description }: 
       return true
     }
     else {
-      return false 
+      return false
     }
   };
 
@@ -44,13 +45,20 @@ export function ExerciseCatalogCard({ id, name, group, img, gif, description }: 
     else setChecked(false)
   };
 
-  function handleAddExerciseInRoutine() {
-
+  async function handleAddExerciseInRoutine() {
     /* if(fromRoute === "training-session") add exercise in session training 
     else keep same thing
     */
+
+    if (routineSelected?.id) {
+      await apiInsertExerciseInRoutine({
+        routineId: routineSelected.id,
+        exerciseId: id,
+        order: 9999
+      });
+    }
     const exercise = {
-      "exercise_id_in_exercises" : id,
+      "exercise_id_in_exercises": id,
       id: String(id),
       name,
       group,
@@ -58,9 +66,7 @@ export function ExerciseCatalogCard({ id, name, group, img, gif, description }: 
       description,
       series: []
     }
-
     const alreadyIncludes = routineSelected!.exercises.filter(item => item.id === exercise.id);
-
     if (alreadyIncludes!.length <= 0) {
       setChecked(prev => !prev)
       setRoutineSelected(prev => {
@@ -81,7 +87,11 @@ export function ExerciseCatalogCard({ id, name, group, img, gif, description }: 
         }
       })
     }
+
+    /* temos que mudar tambem no exercises do routines*/
   }
+
+
 
   /* function  handleAddExerciseInTrainingSession */
 

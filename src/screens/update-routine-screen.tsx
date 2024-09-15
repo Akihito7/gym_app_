@@ -83,6 +83,7 @@ export function UpdateRoutineScreen() {
           renderItem={({ item }) => (
             <ExerciseUpdateRoutineCard
               key={item.id}
+              exercise_id_in_exercises={item.exercise_id_in_exercises}
               id={item.id}
               name={item.name}
               group={item.group}

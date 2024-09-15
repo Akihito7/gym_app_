@@ -3,22 +3,22 @@ import { Header } from "../components/home/header";
 import { defaultTheme } from "../configs/default-theme";
 import { RoutineCard } from "../components/home/routine-card";
 import { Input } from "../components/home/input";
-import { useNavigation } from "@react-navigation/native";
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TypeAppRoutes } from "../routes/app.routes";
 import { useContextRoutine } from "../hooks/useContextRoutine";
 import { apiGetUser } from "../api/get-user";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useContextUser } from "../hooks/useContextUser";
 import { UserDTO } from "../dtos/user-DTO";
 import { apiGetManyRoutines } from "../api/get-many-routines";
 
-type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
+type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>;
 
 export function HomeScreen() {
   const { navigate } = useNavigation<TypeNavigation>();
   const { setRoutineSelected, routines, setRoutines } = useContextRoutine();
-  const { setUser } = useContextUser()
+  const { setUser } = useContextUser();
 
   function handleNavagiteToCreateRoutineAndSetRoutineContext() {
     setRoutineSelected({
@@ -29,20 +29,27 @@ export function HomeScreen() {
     navigate("create-routine");
   }
 
-  async function getUser(){
-    const user : UserDTO = await apiGetUser()
+  async function getUser() {
+    const user: UserDTO = await apiGetUser();
     setUser(user);
   }
 
-  async function getManyRoutines(){
+  async function getManyRoutines() {
     const routines = await apiGetManyRoutines();
-    setRoutines(routines)
+    setRoutines(routines);
   }
 
+  // Busca o usuário e as rotinas assim que a tela for montada
   useEffect(() => {
-    getUser()
-    getManyRoutines()
-  },[])
+    getUser();
+  }, []);
+
+  // Garante que as rotinas sejam buscadas toda vez que a tela entrar em foco
+  useFocusEffect(
+    useCallback(() => {
+      getManyRoutines();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -56,13 +63,15 @@ export function HomeScreen() {
         <FlatList
           data={routines}
           keyExtractor={item => String(item.id)}
-          renderItem={({ item }) => <RoutineCard
-            key={item.id}
-            id={item.id ?? 0}
-            name={item.name ?? ""}
-            exercises={item.exercises}
-            exercisesLength={item.exercises.length ?? 0}
-          />}
+          renderItem={({ item }) => (
+            <RoutineCard
+              key={item.id}
+              id={item.id ?? 0}
+              name={item.name ?? ""}
+              exercises={item.exercises}
+              exercisesLength={item.exercises.length ?? 0}
+            />
+          )}
           ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
           showsVerticalScrollIndicator={false}
           style={{
@@ -77,7 +86,7 @@ export function HomeScreen() {
         </TouchableOpacity>
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -124,4 +133,4 @@ const styles = StyleSheet.create({
     fontWeight: "semibold",
     color: defaultTheme.colors.primaryText,
   }
-})
+});
