@@ -23,7 +23,7 @@ export function RowTableSeries({ exerciseId, id, order, repsInital, kgsInital }:
 
   function handleUpdateSeries() {
     if (!editMode) return setEditMode(true)
-    const exercise = workoutSession.exercises.find(e => e.id === String(exerciseId));
+    const exercise = workoutSession.exercises.find(e => String(e.exercise_id_in_exercises) === String(exerciseId));
     if (exercise) {
 
       const updatedSeries = exercise.series.map(serie =>
@@ -34,7 +34,7 @@ export function RowTableSeries({ exerciseId, id, order, repsInital, kgsInital }:
         series: updatedSeries
       };
       const updatedExercises = workoutSession.exercises.map(ex =>
-        ex.id === String(exerciseId) ? updatedExercise : ex
+        String(ex.exercise_id_in_exercises) === String(exerciseId) ? updatedExercise : ex
       );
       const updateWorkout = {
         ...workoutSession,

@@ -6,10 +6,15 @@ import { ExerciseTrainingCard } from "../components/training-session/exercise-tr
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { TypeAppRoutes } from "../routes/app.routes";
 import { useContextRoutine } from "../hooks/useContextRoutine";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useContextWorkout } from "../hooks/useContextWorkout";
 import { FlatList } from "react-native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { HeaderTrainingSession } from "../components/history-training-session/header-training-session";
+import { useContextUser } from "../hooks/useContextUser";
+import { apiCreateSessionTraining } from "../api/create-session-training";
+import { apiInsertExerciseInTrainingSession } from "../api/insert-exercise-in-training-session";
+import { apiInsertSetsInTrainingExercise } from "../api/insert-sets-in-training-exercise";
 
 
 type TrainingSessionScreen = RouteProp<TypeAppRoutes, 'training-session'>;
@@ -18,9 +23,11 @@ type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 export function TrainingSessionScreen() {
   const route = useRoute<TrainingSessionScreen>();
   const routineId = route.params.routineId;
+  const { user } = useContextUser()
   const { routines } = useContextRoutine();
   const { workoutSession, setWorkoutSession } = useContextWorkout();
   const { navigate } = useNavigation<TypeNavigation>();
+  const [timer, setTimer] = useState({ minutes: 0, seconds: 0 });
 
   function setWorkoutFromRoutine() {
     const workout = routines.find(item => item.id === routineId);
@@ -32,15 +39,50 @@ export function TrainingSessionScreen() {
   function handleNavigateExerciseCatalog() {
     navigate("exercise-catalog")
   }
+
+  async function handleSaveTrainingSession() {
+    const durationFormatted = `${String(timer.minutes).padStart(2, "0")}:${String(timer.seconds).padStart(2, "0")}`
+    const response = await apiCreateSessionTraining({
+      userId: user.id,
+      routineId,
+      duration: durationFormatted
+    })
+
+    const setsPromisses = workoutSession.exercises.map(async (exercise) => {
+      if(exercise.series.length <= 0) return;
+      const exerciseResponse = await apiInsertExerciseInTrainingSession({
+        exerciseId: exercise.exercise_id_in_exercises,
+        workoutId: response.id,
+        order: 1
+      });
+
+      return exercise.series.map((s) => {
+        return apiInsertSetsInTrainingExercise({
+          workoutExerciseId: exerciseResponse.id,
+          reps: s.reps,
+          order: s.order,
+          weight: s.kg
+        })
+      })
+
+    })
+  };
+
   useEffect(() => {
     setWorkoutFromRoutine();
   }, [routineId])
+  
   return (
     <View style={styles.container}>
-      <Header title="Sessão atual" />
+      <HeaderTrainingSession
+        handleSaveTrainingSession={handleSaveTrainingSession}
+      />
       <ScrollView>
         <View style={styles.main}>
-          <Timer />
+          <Timer
+            timer={timer}
+            setTimer={setTimer}
+          />
           <View style={styles.containerExerciseTrainingCard}>
             <FlatList
               data={workoutSession.exercises}

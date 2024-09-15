@@ -84,7 +84,7 @@ export function ExerciseTrainingCard({ exercise_id_in_exercises, exerciseId, exe
             {
               series.length > 0 && series.map(item => (
                 <RowTableSeries
-                  exerciseId={exerciseId}
+                  exerciseId={exercise_id_in_exercises}
                   id={item.id}
                   order={item.order}
                   kgsInital={item.kg}

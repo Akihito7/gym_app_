@@ -1,11 +1,16 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { defaultTheme } from "../../configs/default-theme"
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-export function Timer() {
-    const [timer, setTimer] = useState({ minutes: 0, seconds: 0 });
+
+type ParamsTimer = {
+  timer : {minutes : number, seconds : number}
+  setTimer : React.Dispatch<SetStateAction<{minutes : number, seconds : number}>>
+};
+
+export function Timer({ timer, setTimer } : ParamsTimer) {
     const [timerStatus, setTimerStatus] = useState(false);
     useEffect(() => {
         const tick = () => {
