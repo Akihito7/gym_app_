@@ -1,52 +1,64 @@
-import { SectionList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { HistoryCard } from "../components/history-training-session/history-card";
 import { defaultTheme } from "../configs/default-theme";
 import { Header } from "../components/header";
+import { useCallback, useEffect, useState } from "react";
+import { useContextUser } from "../hooks/useContextUser";
+import { apiGetHistoryTrainingSessions } from "../api/get-history-training-sessions";
+import { useFocusEffect } from "@react-navigation/native";
 
-const groupedData = [
-  {
-    title: '2024-09-10',
-    data: [
-      { id: 1, date: '2024-09-10', workout: 'Chest Workout', details: 'Bench press, push-ups' },
-      { id: 2, date: '2024-09-10', workout: 'Leg Day', details: 'Squats, lunges' },
-    ],
-  },
-  {
-    title: '2024-09-11',
-    data: [
-      { id: 3, date: '2024-09-11', workout: 'Back Workout', details: 'Pull-ups, deadlifts' },
-    ],
-  },
-];
+
+
+type TypeHistory = {
+  id: number;
+  name: string;
+  duration: string;
+  created_at: Date;
+};
 
 export function HistoryTrainingSession() {
+  const { user } = useContextUser();
+
+  const [history, setHistory] = useState([] as TypeHistory[])
+
+
+  useFocusEffect(
+    useCallback(() => {
+      async function getHistoryTrainingSessions() {
+        const history = await apiGetHistoryTrainingSessions(user.id);
+        setHistory(history);
+      }
+      getHistoryTrainingSessions()
+    }, [])
+  );
+
   return (
     <View style={styles.container}>
       <Header title="Historico" />
       <View style={styles.main}>
-        <SectionList
-          sections={groupedData}
+        <FlatList
+          data={history}
           keyExtractor={item => String(item.id)}
-          renderItem={() => <HistoryCard />}
-          renderSectionHeader={(item) => (
-            <Text
-              style={styles.secondaryText}
-            >
-              {item.section.title}
-            </Text>
+          renderItem={({ item }) => (
+            <View>
+              <HistoryCard
+                name={item.name}
+                dateFinished={item.created_at}
+              />
+            </View>
           )}
           ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
         />
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    backgroundColor: defaultTheme.colors.backgroundScreen
+    backgroundColor: defaultTheme.colors.backgroundScreen,
   },
   main: {
     flex: 1,
@@ -58,6 +70,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: defaultTheme.colors.secondaryText,
     fontWeight: "semibold",
-    marginVertical : 8,
+    marginVertical: 8,
   },
-})
+});

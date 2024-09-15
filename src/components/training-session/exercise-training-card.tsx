@@ -83,8 +83,9 @@ export function ExerciseTrainingCard({ exercise_id_in_exercises, exerciseId, exe
           <>
             <HeaderTableSeries />
             {
-              series.length > 0 && series.map(item => (
+              series.length > 0 && series.map((item, index) => (
                 <RowTableSeries
+                  key={index}
                   exerciseId={exercise_id_in_exercises}
                   id={item.id}
                   order={item.order}

@@ -1,13 +1,25 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { defaultTheme } from "../../configs/default-theme";
 
-export function HistoryCard() {
+
+type ParamsHistoryCard = {
+  name: string;
+  dateFinished: Date;
+}
+
+export function HistoryCard({ name, dateFinished }: ParamsHistoryCard) {
   return (
     <TouchableOpacity>
       <View style={styles.container}>
         <View style={styles.containerSessionInfo}>
-          <Text style={styles.primaryText}>Peitoral pump maximo</Text>
-          <Text style={styles.secondaryText}>01:45:00</Text>
+          <Text style={styles.primaryText}>{name}</Text>
+          <Text style={styles.secondaryText}>{new Date(dateFinished).toLocaleString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          })}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -21,7 +33,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: defaultTheme.colors.backgroundComponents,
     borderRadius: 10,
-    paddingVertical : 12,
+    paddingVertical: 12,
     paddingRight: 12,
   },
   containerSessionInfo: {

@@ -1,6 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from "react-native";
 import { defaultTheme } from "../configs/default-theme";
-import { Header } from "../components/header";
 import { Timer } from "../components/training-session/timer";
 import { ExerciseTrainingCard } from "../components/training-session/exercise-training-card";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
@@ -15,6 +14,7 @@ import { useContextUser } from "../hooks/useContextUser";
 import { apiCreateSessionTraining } from "../api/create-session-training";
 import { apiInsertExerciseInTrainingSession } from "../api/insert-exercise-in-training-session";
 import { apiInsertSetsInTrainingExercise } from "../api/insert-sets-in-training-exercise";
+
 
 
 type TrainingSessionScreen = RouteProp<TypeAppRoutes, 'training-session'>;
@@ -50,7 +50,6 @@ export function TrainingSessionScreen() {
       routineId,
       duration: durationFormatted
     })
-
     const setsPromisses = workoutSession.exercises.map(async (exercise) => {
       if (exercise.series.length <= 0) return;
       const exerciseResponse = await apiInsertExerciseInTrainingSession({
@@ -69,6 +68,8 @@ export function TrainingSessionScreen() {
       })
 
     })
+    setStep(1)
+    navigate("home")
   };
 
   function nextStep() {
@@ -188,9 +189,10 @@ export function TrainingSessionScreen() {
             <View style={styles.containerGroups}>
 
               {
-                workedGroups.length > 0 && workedGroups.map(w => (
+                workedGroups.length > 0 && workedGroups.map((w, index) => (
                   <View style={styles.cardGroup}>
                     <Text
+                      key={index}
                       style={{...styles.title, textTransform : "capitalize"}}
                     >
                       {w}

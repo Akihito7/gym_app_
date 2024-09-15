@@ -13,8 +13,7 @@ export function ExerciseDetailsScreen() {
   const { item, fromRoute } = route.params;
 
   const { navigate } = useNavigation<TypeNavigation>();
-  
-  console.log("eu sou o from => ", fromRoute)
+
   function handleNavigateBack() {
     if (fromRoute === 'exercise-catalog') navigate("exercise-catalog");
     if (fromRoute === 'view-routine') navigate("view-routine");
