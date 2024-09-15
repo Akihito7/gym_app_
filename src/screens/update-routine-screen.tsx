@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, TextInput, View } from "react-native"
+import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
 import { defaultTheme } from "../configs/default-theme"
 import { HeaderUpdateRoutine } from "../components/update-routine/header-update-routine"
 import { InputUpdateRoutine } from "../components/update-routine/input-update-routine"
@@ -6,9 +6,16 @@ import { FontAwesome, MaterialIcons } from "@expo/vector-icons"
 import { ExerciseUpdateRoutineCard } from "../components/update-routine/exercise-update-routine-card"
 import { useContextRoutine } from "../hooks/useContextRoutine"
 import { useEffect, useState } from "react"
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
+import { TypeAppRoutes } from "../routes/app.routes"
+import { useNavigation } from "@react-navigation/native"
+
+type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
+
 
 export function UpdateRoutineScreen() {
 
+  const { navigate } = useNavigation<TypeNavigation>();
   const { routineSelected, setRoutineSelected, setRoutines, routines, exercisesRemoved } = useContextRoutine();
   const [routineName, setRoutineName] = useState(routineSelected?.name);
 
@@ -34,9 +41,6 @@ export function UpdateRoutineScreen() {
     setRoutines(routinesUpdated)
   }
 
-  useEffect(() => {
-    console.log("removed exercises => ", exercisesRemoved )
-  }, [exercisesRemoved])
 
   return (
     <View style={styles.container}>
@@ -92,6 +96,14 @@ export function UpdateRoutineScreen() {
             marginTop: 24,
           }}
         />
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigate("exercise-catalog")}
+        >
+          <Text style={styles.primaryText}>Adicionar exercicio</Text>
+        </TouchableOpacity>
+
       </View>
     </View>
   )
@@ -129,5 +141,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: defaultTheme.colors.primaryText,
     marginLeft: 8,
+  },
+  primaryText: {
+    fontSize: 20,
+    color: defaultTheme.colors.secondaryText,
+    fontWeight: "400",
+  },
+  button: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    borderColor: defaultTheme.colors.backgroundComponents,
+    borderWidth: 2,
+    height: 52,
+    marginBottom: 12,
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: "semibold",
+    color: defaultTheme.colors.primaryText,
   },
 })

@@ -15,6 +15,7 @@ type ParamsRoutineCard = {
   name: string;
   exercisesLength: number;
   exercises: {
+    exercise_id_in_exercises : number,
     id: string;
     name: string;
     group: string;
@@ -55,6 +56,7 @@ export function RoutineCard({ id, name, exercises, exercisesLength }: ParamsRout
   }
 
   function handleNavigateUpdateRoutine() {
+    console.log("EU SOU A ROTINA", exercises)
     const routine = {
       id,
       name,

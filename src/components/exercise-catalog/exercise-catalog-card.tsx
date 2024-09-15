@@ -12,7 +12,7 @@ type ParamsExerciseCard = {
   id: number;
   name: string;
   group: string;
-  img : string;
+  img: string;
   gif: string;
   description: string;
 }
@@ -20,17 +20,21 @@ type ParamsExerciseCard = {
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
 export function ExerciseCatalogCard({ id, name, group, img, gif, description }: ParamsExerciseCard) {
-
+  
   const { routineSelected, setRoutineSelected } = useContextRoutine();
+
   const [checked, setChecked] = useState(checkedInitialState(id));
   const { navigate } = useNavigation<TypeNavigation>();
 
   function checkedInitialState(id: number) {
-    const alreadySelected = routineSelected?.exercises.filter(item => item.id === String(id));
-    if (alreadySelected!.length > 0) return true;
-    else false
+    const alreadySelected = routineSelected?.exercises.some(item => String(item.exercise_id_in_exercises) === String(id));
+    if (alreadySelected) {
+      return true
+    }
+    else {
+      return false 
+    }
   };
-
 
   /* from route, depois verificar  onde vamos adicionar o exercicio, basicamente e isso o fluxo */
 
@@ -46,6 +50,7 @@ export function ExerciseCatalogCard({ id, name, group, img, gif, description }: 
     else keep same thing
     */
     const exercise = {
+      "exercise_id_in_exercises" : id,
       id: String(id),
       name,
       group,
@@ -96,6 +101,10 @@ export function ExerciseCatalogCard({ id, name, group, img, gif, description }: 
   useEffect(() => {
     CheckedExerciseRemovedFromRoutine()
   }, [routineSelected?.exercises])
+
+  useEffect(() => {
+    setChecked(checkedInitialState(id));
+  }, [routineSelected?.exercises]);
 
   return (
     <TouchableOpacity onPress={handleNavigateDetails}>

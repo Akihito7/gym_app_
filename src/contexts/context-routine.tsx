@@ -11,6 +11,7 @@ export type TypeRoutineSelected = {
 }
 
 export type Exercises = {
+ exercise_id_in_exercises : number,
   id: string;
   name: string;
   group: string;
