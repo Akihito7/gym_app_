@@ -4,12 +4,14 @@ import { View } from "react-native"
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 type TypeHeaderTrainingSession = {
-  handleSaveTrainingSession() : void;
+ /*  handleSaveTrainingSession() : void; */
+  nextStep() : void;
+  backStep() : void;
 }
-export function HeaderTrainingSession({ handleSaveTrainingSession } : TypeHeaderTrainingSession) {
+export function HeaderTrainingSession({ nextStep, backStep } : TypeHeaderTrainingSession) {
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={backStep}>
         <AntDesign
           name="back"
           size={32}
@@ -19,7 +21,7 @@ export function HeaderTrainingSession({ handleSaveTrainingSession } : TypeHeader
 
       <Text style={styles.title}>Sessão Atual</Text>
 
-      <TouchableOpacity onPress={handleSaveTrainingSession} >
+      <TouchableOpacity onPress={nextStep} >
         <AntDesign
           name="check"
           size={32}

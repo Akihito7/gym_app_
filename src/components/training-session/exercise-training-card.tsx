@@ -11,6 +11,7 @@ type TypeExerciseTrainingCard = {
   exerciseId: number;
   exerciseName: string;
   group: string;
+  img : string,
   gif: string;
   series: {
     id: number;
@@ -19,7 +20,7 @@ type TypeExerciseTrainingCard = {
     kg: number
   }[]
 }
-export function ExerciseTrainingCard({ exercise_id_in_exercises, exerciseId, exerciseName, group, gif, series }: TypeExerciseTrainingCard) {
+export function ExerciseTrainingCard({ exercise_id_in_exercises, exerciseId, exerciseName, group, img, gif, series }: TypeExerciseTrainingCard) {
   const { workoutSession, setWorkoutSession } = useContextWorkout();
 
   function handleAddNewSerieInExercise() {
@@ -63,7 +64,7 @@ export function ExerciseTrainingCard({ exercise_id_in_exercises, exerciseId, exe
       <View style={styles.container}>
         <View style={styles.containerExerciseInfo}>
           <Avatar
-            source={{ uri: gif }}
+            source={{ uri: `https://drive.google.com/uc?export=view&id=${img}`}}
             size={64}
             avatarStyle={{ borderRadius: 10 }}
           />
