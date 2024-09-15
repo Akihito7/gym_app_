@@ -86,6 +86,7 @@ export function UpdateRoutineScreen() {
               key={item.id}
               exercise_id_in_exercises={item.exercise_id_in_exercises}
               id={item.id}
+              img={item.img_url}
               name={item.name}
               group={item.group}
               gif={item.gif}

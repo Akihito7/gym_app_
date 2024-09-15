@@ -40,6 +40,7 @@ export function ViewRoutineScreen() {
             id={item.id}
             name={item.name ?? ""}
             group={item.group}
+            img={item.img_url}
             gif={item.gif}
             description={item.description}
 

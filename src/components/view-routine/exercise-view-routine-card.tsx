@@ -1,7 +1,6 @@
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native"
 import { defaultTheme } from "../../configs/default-theme"
 import { Avatar } from "react-native-elements"
-import ExerciseImg from "../../../assets/biceps.png"
 import { useNavigation } from "@react-navigation/native"
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
 import { TypeAppRoutes } from "../../routes/app.routes"
@@ -11,13 +10,14 @@ type ParamsExerciseViewRoutineCard = {
   id: string;
   name: string;
   group: string;
+  img : string;
   gif: string;
   description: string
 };
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
-export function ExerciseViewRoutineCard({ id, name, group, gif, description }: ParamsExerciseViewRoutineCard) {
+export function ExerciseViewRoutineCard({ id, name, group, img, gif, description }: ParamsExerciseViewRoutineCard) {
   const { navigate } = useNavigation<TypeNavigation>();
 
   function handleNavigateDetails() {
@@ -37,7 +37,7 @@ export function ExerciseViewRoutineCard({ id, name, group, gif, description }: P
     <TouchableOpacity onPress={handleNavigateDetails}>
       <View style={styles.container}>
         <Avatar
-          source={ExerciseImg}
+           source={{ uri: `https://drive.google.com/uc?export=view&id=${img}` }}
           size={64}
           avatarStyle={{ borderRadius: 10 }}
         />

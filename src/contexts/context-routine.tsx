@@ -15,6 +15,7 @@ export type Exercises = {
   id: string;
   name: string;
   group: string;
+  img_url : string;
   gif: string;
   description: string;
   series: {

@@ -17,6 +17,7 @@ export function ExerciseDetailsScreen() {
   function handleNavigateBack() {
     if (fromRoute === 'exercise-catalog') navigate("exercise-catalog");
     if (fromRoute === 'view-routine') navigate("view-routine");
+    if(fromRoute === 'update-routine') navigate('update-routine');
     else navigate("create-routine");
   }
 

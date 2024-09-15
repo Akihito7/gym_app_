@@ -14,13 +14,14 @@ type ParamsExerciseCard = {
   id: string;
   name: string;
   group: string;
+  img : string
   gif: string;
   description: string;
 }
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
-export function ExerciseUpdateRoutineCard({ exercise_id_in_exercises, id, name, group, gif, description }: ParamsExerciseCard) {
+export function ExerciseUpdateRoutineCard({ exercise_id_in_exercises, id, name, group, img ,gif, description }: ParamsExerciseCard) {
   const { setRoutines, routines, routineSelected, setRoutineSelected, setExercisesRemoved } = useContextRoutine();
   const { navigate } = useNavigation<TypeNavigation>()
 
@@ -53,7 +54,7 @@ export function ExerciseUpdateRoutineCard({ exercise_id_in_exercises, id, name, 
         gif,
         description
       },
-      fromRoute: "create-routine"
+      fromRoute: "update-routine"
     })
   }
 
@@ -61,7 +62,7 @@ export function ExerciseUpdateRoutineCard({ exercise_id_in_exercises, id, name, 
     <TouchableOpacity onPress={handleNavigateDetails}>
       <View style={styles.container}>
         <Avatar
-          source={ExerciseImg}
+           source={{ uri: `https://drive.google.com/uc?export=view&id=${img}` }}
           size={64}
           avatarStyle={{ borderRadius: 10 }}
         />

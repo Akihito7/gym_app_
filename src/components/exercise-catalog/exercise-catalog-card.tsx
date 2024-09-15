@@ -62,6 +62,7 @@ export function ExerciseCatalogCard({ id, name, group, img, gif, description }: 
       id: String(id),
       name,
       group,
+      img_url : img,
       gif,
       description,
       series: []
