@@ -9,6 +9,7 @@ import { useEffect, useState } from "react"
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
 import { TypeAppRoutes } from "../routes/app.routes"
 import { useNavigation } from "@react-navigation/native"
+import { apiUpdateDetails } from "../api/update-routine-details"
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
@@ -23,14 +24,13 @@ export function UpdateRoutineScreen() {
     setRoutineName(value)
   };
 
-  function handleSetNameRoutine() {
+  async function handleSetNameRoutine() {
     setRoutineSelected(prev => {
       return {
         ...prev,
         name: routineName ?? ""
       }
     })
-
     const routinesUpdated = routines.map(r => {
       if (r.id === routineSelected?.id) return {
         ...r,
@@ -39,6 +39,7 @@ export function UpdateRoutineScreen() {
       return r
     })
     setRoutines(routinesUpdated)
+    await apiUpdateDetails(Number(routineSelected?.id), routineName!)
   }
 
 
