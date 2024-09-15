@@ -7,6 +7,7 @@ import { RowTableSeries } from "./row-table-series"
 import { useContextWorkout } from "../../hooks/useContextWorkout"
 
 type TypeExerciseTrainingCard = {
+  exercise_id_in_exercises : number;
   exerciseId: number;
   exerciseName: string;
   group: string;
@@ -18,11 +19,11 @@ type TypeExerciseTrainingCard = {
     kg: number
   }[]
 }
-export function ExerciseTrainingCard({ exerciseId, exerciseName, group, gif, series }: TypeExerciseTrainingCard) {
+export function ExerciseTrainingCard({ exercise_id_in_exercises, exerciseId, exerciseName, group, gif, series }: TypeExerciseTrainingCard) {
   const { workoutSession, setWorkoutSession } = useContextWorkout();
 
   function handleAddNewSerieInExercise() {
-    const exercise = workoutSession.exercises.find(e => e.id === String(exerciseId));
+    const exercise = workoutSession.exercises.find(e => String(e.exercise_id_in_exercises) === String(exercise_id_in_exercises));
       
     if (exercise) {
       const newSeries = {
@@ -37,7 +38,7 @@ export function ExerciseTrainingCard({ exerciseId, exerciseName, group, gif, ser
       };
 
       const updatedExercises = workoutSession.exercises.map(exercise =>
-        exercise.id === String(exerciseId) ? updatedExercise : exercise
+        String(exercise.exercise_id_in_exercises) === String(exercise_id_in_exercises) ? updatedExercise : exercise
       );
       const updateWorkout = {
         ...workoutSession,
@@ -45,7 +46,7 @@ export function ExerciseTrainingCard({ exerciseId, exerciseName, group, gif, ser
       };
       setWorkoutSession(updateWorkout);
     } else {
-      console.error("Exercise not found with id:", exerciseId);
+      console.error("Exercise not found with id:", exercise_id_in_exercises);
     }
   }
 

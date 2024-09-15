@@ -14,6 +14,7 @@ export type TypeWorkoutSession = {
     id: number | null;
     name: string | null;
     exercises: {
+        exercise_id_in_exercises : number;
         id: string;
         name: string;
         group: string;

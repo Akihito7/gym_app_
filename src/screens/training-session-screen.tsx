@@ -47,6 +47,7 @@ export function TrainingSessionScreen() {
               keyExtractor={item => String(item.id)}
               renderItem={({ item }) => (
                 <ExerciseTrainingCard
+                  exercise_id_in_exercises={item.exercise_id_in_exercises}
                   gif={item.gif}
                   exerciseId={Number(item.id)}
                   group={item.group}

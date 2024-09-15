@@ -49,7 +49,7 @@ export function ExerciseCatalogCard({ id, name, group, img, gif, description }: 
     /* if(fromRoute === "training-session") add exercise in session training 
     else keep same thing
     */
-
+    
     if (routineSelected?.id) {
       await apiInsertExerciseInRoutine({
         routineId: routineSelected.id,
@@ -71,8 +71,8 @@ export function ExerciseCatalogCard({ id, name, group, img, gif, description }: 
       setChecked(prev => !prev)
       setRoutineSelected(prev => {
         return {
-          id: null,
-          name: null,
+          id: routineSelected?.id ?? null,
+          name: routineSelected?.name ?? null,
           exercises: [...prev?.exercises, exercise]
         }
       })
