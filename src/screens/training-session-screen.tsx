@@ -122,7 +122,7 @@ export function TrainingSessionScreen() {
             <ScrollView
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{
-                paddingBottom: 44, // Para garantir espaço no final
+                paddingBottom: 44,
               }}
             >
               <Timer
@@ -131,7 +131,7 @@ export function TrainingSessionScreen() {
               />
               <View style={styles.containerExerciseTrainingCard}>
                 {workoutSession?.exercises?.map((item, index) => (
-                  <View key={item.id} style={{ marginBottom: 8 }}>
+                  <View key={index} style={{ marginBottom: 8 }}>
                     <ExerciseTrainingCard
                       key={item.id}
                       img={item.img_url}
