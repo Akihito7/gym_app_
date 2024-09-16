@@ -127,7 +127,7 @@ export function CreateRoutineScreen() {
 
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => navigate("exercise-catalog")}
+                onPress={() => navigate("exercise-catalog", {fromRoute : "create-routine"})}
               >
                 <Text style={styles.primaryText}>Adicionar exercicio</Text>
               </TouchableOpacity>
@@ -143,7 +143,7 @@ export function CreateRoutineScreen() {
                 <Text style={styles.primaryText}>Nenhum exercicio adicionado</Text>
                 <TouchableOpacity
                   style={styles.button}
-                  onPress={() => navigate("exercise-catalog")}
+                  onPress={() => navigate("exercise-catalog", { fromRoute : "create-routine"})}
                 >
                   <Text style={styles.primaryText}>Adicionar exercicio</Text>
                 </TouchableOpacity>

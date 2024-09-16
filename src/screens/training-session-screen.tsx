@@ -14,6 +14,7 @@ import { useContextUser } from "../hooks/useContextUser";
 import { apiCreateSessionTraining } from "../api/create-session-training";
 import { apiInsertExerciseInTrainingSession } from "../api/insert-exercise-in-training-session";
 import { apiInsertSetsInTrainingExercise } from "../api/insert-sets-in-training-exercise";
+import { TypeWorkoutSession } from "../contexts/context-workout";
 
 
 
@@ -40,7 +41,7 @@ export function TrainingSessionScreen() {
   };
 
   function handleNavigateExerciseCatalog() {
-    navigate("exercise-catalog")
+    navigate("exercise-catalog", { fromRoute: "training-session" })
   }
 
   async function handleSaveTrainingSession() {
@@ -57,7 +58,6 @@ export function TrainingSessionScreen() {
         workoutId: response.id,
         order: 1
       });
-
       return exercise.series.map((s) => {
         return apiInsertSetsInTrainingExercise({
           workoutExerciseId: exerciseResponse.id,
@@ -68,6 +68,7 @@ export function TrainingSessionScreen() {
       })
 
     })
+    //setWorkoutSession({} as TypeWorkoutSession)
     setStep(1)
     navigate("home")
   };
@@ -82,7 +83,7 @@ export function TrainingSessionScreen() {
 
   function getWorkedGroup() {
     const groupsWorked: string[] = [];
-    workoutSession.exercises.forEach(e => {
+    workoutSession?.exercises?.forEach(e => {
       if (e.series.length <= 0) return;
       const alreadyIncluds = groupsWorked.includes(e.group.toLocaleLowerCase());
       if (alreadyIncluds) return;
@@ -92,9 +93,9 @@ export function TrainingSessionScreen() {
     setWorkedGroups(groupsWorked);
   }
 
-  function getTotalSetsInTraining(){
+  function getTotalSetsInTraining() {
     let totalSeries = 0
-    workoutSession.exercises.forEach(e => {
+    workoutSession?.exercises?.forEach(e => {
       totalSeries += e.series.length
     })
 
@@ -175,7 +176,7 @@ export function TrainingSessionScreen() {
             <View style={styles.containerCards}>
               <View style={styles.containerCard}>
                 <Text style={styles.titleCard}>Total exercicios</Text>
-                <Text style={styles.textCard}>{workoutSession.exercises.length}</Text>
+                <Text style={styles.textCard}>{workoutSession?.exercises?.length}</Text>
               </View>
 
               <View style={styles.containerCard}>
@@ -193,7 +194,7 @@ export function TrainingSessionScreen() {
                   <View style={styles.cardGroup}>
                     <Text
                       key={index}
-                      style={{...styles.title, textTransform : "capitalize"}}
+                      style={{ ...styles.title, textTransform: "capitalize" }}
                     >
                       {w}
                     </Text>

@@ -102,7 +102,7 @@ export function UpdateRoutineScreen() {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigate("exercise-catalog")}
+          onPress={() => navigate("exercise-catalog", {fromRoute : "update-routine"})}
         >
           <Text style={styles.primaryText}>Adicionar exercicio</Text>
         </TouchableOpacity>

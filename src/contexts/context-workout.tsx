@@ -21,13 +21,15 @@ export type TypeWorkoutSession = {
     group: string;
     gif: string;
     description: string;
-    series: {
-      id: number,
-      order: number,
-      kg: number,
-      reps: number,
-    }[]
+    series: TypeSetsWokoutSession[]
   }[]
+}
+
+export type TypeSetsWokoutSession = {
+  id: number,
+  order: number,
+  kg: number,
+  reps: number,
 }
 
 export function ContextWorkoutProvider({ children }: TypeContextWorkoutProvider) {

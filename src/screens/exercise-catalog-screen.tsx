@@ -3,13 +3,14 @@ import { Header } from "../components/header";
 import { Input } from "../components/input";
 import { ExerciseCatalogCard } from "../components/exercise-catalog/exercise-catalog-card";
 import { defaultTheme } from "../configs/default-theme";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TypeAppRoutes } from "../routes/app.routes";
 import { FontAwesome } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { apiGetManyExercises } from "../api/get-many-exercises";
 import { ExerciseDTO } from "../dtos/exercise-DTO";
+import { useContextRoutine } from "../hooks/useContextRoutine";
 
 
 /* 
@@ -17,20 +18,30 @@ vou precisar receber um parametro na rota, sobre de qual rota veio pra essa, e d
 e com base nisso eu sei onde devo adicionar o exercicio, se e em uma rotina ou uma sessao e sei tbm para qual rota devo navegar depois
 */
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
+type ExerciseCatalogProp = RouteProp<TypeAppRoutes, 'exercise-catalog'>;
 
 
 export function ExerciseCatalogScreen() {
   const [searchInputValue, setSearchInputValue] = useState("");
   const { navigate } = useNavigation<TypeNavigation>();
   const [exercises, setExercises] = useState<ExerciseDTO[]>([])
+  const { routineSelected } = useContextRoutine()
+  const { params } = useRoute<ExerciseCatalogProp>()
+  const fromRoute = params.fromRoute;
 
-  function handleNavigateToCreateRoutine() {
+  console.log("EU VIM DA ROTA => ", fromRoute)
+
+  function handleNavigateBack() {
     /* 
     if(fromRoute === "training-session") navigate("training-session")
     else navigate("create-routine")
     */
-    navigate("create-routine");
+
+    if (fromRoute === "training-session") navigate("training-session", { routineId: Number(routineSelected!.id) ?? 0 });
+    if (fromRoute === "create-routine") navigate("create-routine")
   };
+
+
 
   function handleInputValue(value: string) {
     setSearchInputValue(value)
@@ -68,6 +79,7 @@ export function ExerciseCatalogScreen() {
           keyExtractor={item => String(item.id)}
           renderItem={({ item }) => (
             <ExerciseCatalogCard
+              fromRoute={fromRoute}
               key={item.id}
               id={item.id}
               name={item.name}
@@ -85,7 +97,7 @@ export function ExerciseCatalogScreen() {
         />
         <TouchableOpacity
           style={styles.button}
-          onPress={handleNavigateToCreateRoutine}
+          onPress={handleNavigateBack}
         >
           <Text style={styles.buttonText}>Adicionar</Text>
         </TouchableOpacity>

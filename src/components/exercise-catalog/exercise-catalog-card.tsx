@@ -8,8 +8,10 @@ import { useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TypeAppRoutes } from "../../routes/app.routes";
 import { apiInsertExerciseInRoutine } from "../../api/insert-exercise-in-routine";
+import { useContextWorkout } from "../../hooks/useContextWorkout";
 
 type ParamsExerciseCard = {
+  fromRoute: string;
   id: number;
   name: string;
   group: string;
@@ -20,12 +22,13 @@ type ParamsExerciseCard = {
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 
-export function ExerciseCatalogCard({ id, name, group, img, gif, description }: ParamsExerciseCard) {
+export function ExerciseCatalogCard({ fromRoute, id, name, group, img, gif, description }: ParamsExerciseCard) {
 
   const { routineSelected, setRoutineSelected } = useContextRoutine();
 
   const [checked, setChecked] = useState(checkedInitialState(id));
   const { navigate } = useNavigation<TypeNavigation>();
+  const { setWorkoutSession, workoutSession } = useContextWorkout()
 
   function checkedInitialState(id: number) {
     const alreadySelected = routineSelected?.exercises.some(item => String(item.exercise_id_in_exercises) === String(id));
@@ -49,51 +52,69 @@ export function ExerciseCatalogCard({ id, name, group, img, gif, description }: 
     /* if(fromRoute === "training-session") add exercise in session training 
     else keep same thing
     */
-    
-    if (routineSelected?.id) {
-      await apiInsertExerciseInRoutine({
-        routineId: routineSelected.id,
-        exerciseId: id,
-        order: 9999
-      });
-    }
-    const exercise = {
-      "exercise_id_in_exercises": id,
-      id: String(id),
-      name,
-      group,
-      img_url : img,
-      gif,
-      description,
-      series: []
-    }
-    const alreadyIncludes = routineSelected!.exercises.filter(item => item.id === exercise.id);
-    if (alreadyIncludes!.length <= 0) {
-      setChecked(prev => !prev)
-      setRoutineSelected(prev => {
+
+    if (fromRoute === "training-session") {
+      const alereaydIncludesInWorkout = workoutSession.exercises.filter(e => String(e.exercise_id_in_exercises) === String(id))
+      if (alereaydIncludesInWorkout.length > 0) return;
+      const exerciseWorkout = {
+        img_url: img,
+        exercise_id_in_exercises: id,
+        id: String(id),
+        name,
+        group,
+        gif,
+        description,
+        series: []
+      }
+      setWorkoutSession(prev => {
         return {
-          id: routineSelected?.id ?? null,
-          name: routineSelected?.name ?? null,
-          exercises: [...prev?.exercises, exercise]
-        }
-      })
-    }
-    if (alreadyIncludes.length > 0) {
-      setChecked(prev => !prev)
-      setRoutineSelected(prev => {
-        return {
-          id: null,
-          name: null,
-          exercises: prev?.exercises.filter(item => item.id !== exercise.id)
+          ...prev,
+          exercises: [...prev.exercises, exerciseWorkout]
         }
       })
     }
 
-    /* temos que mudar tambem no exercises do routines*/
+    if (fromRoute != "training-session") {
+      if (routineSelected?.id) {
+        await apiInsertExerciseInRoutine({
+          routineId: routineSelected.id,
+          exerciseId: id,
+          order: 9999
+        });
+      }
+      const exercise = {
+        "exercise_id_in_exercises": id,
+        id: String(id),
+        name,
+        group,
+        img_url: img,
+        gif,
+        description,
+        series: []
+      }
+      const alreadyIncludes = routineSelected!.exercises.filter(item => item.id === exercise.id);
+      if (alreadyIncludes!.length <= 0) {
+        setChecked(prev => !prev)
+        setRoutineSelected(prev => {
+          return {
+            id: routineSelected?.id ?? null,
+            name: routineSelected?.name ?? null,
+            exercises: [...prev?.exercises, exercise]
+          }
+        })
+      }
+      if (alreadyIncludes.length > 0) {
+        setChecked(prev => !prev)
+        setRoutineSelected(prev => {
+          return {
+            id: null,
+            name: null,
+            exercises: prev?.exercises.filter(item => item.id !== exercise.id)
+          }
+        })
+      }
+    }
   }
-
-
-
   /* function  handleAddExerciseInTrainingSession */
 
   function handleNavigateDetails() {

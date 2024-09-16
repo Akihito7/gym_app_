@@ -16,7 +16,9 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 export type TypeAppRoutes = {
   "home": undefined;
-  "exercise-catalog": undefined;
+  "exercise-catalog": {
+    fromRoute : string;
+  };
   "create-routine": undefined;
   "exercise-details":
   {
