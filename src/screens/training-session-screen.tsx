@@ -7,7 +7,6 @@ import { TypeAppRoutes } from "../routes/app.routes";
 import { useContextRoutine } from "../hooks/useContextRoutine";
 import { useEffect, useState } from "react";
 import { useContextWorkout } from "../hooks/useContextWorkout";
-import { FlatList } from "react-native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { HeaderTrainingSession } from "../components/history-training-session/header-training-session";
 import { useContextUser } from "../hooks/useContextUser";
@@ -68,7 +67,7 @@ export function TrainingSessionScreen() {
       })
 
     })
-    //setWorkoutSession({} as TypeWorkoutSession)
+    setWorkoutSession({} as TypeWorkoutSession)
     setStep(1)
     navigate("home")
   };
@@ -119,18 +118,22 @@ export function TrainingSessionScreen() {
 
       {
         step === 1 && (
-          <ScrollView>
-            <View style={styles.main}>
+          <View style={styles.main}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingBottom: 44, // Para garantir espaço no final
+              }}
+            >
               <Timer
                 timer={timer}
                 setTimer={setTimer}
               />
               <View style={styles.containerExerciseTrainingCard}>
-                <FlatList
-                  data={workoutSession.exercises}
-                  keyExtractor={item => String(item.id)}
-                  renderItem={({ item }) => (
+                {workoutSession?.exercises?.map((item, index) => (
+                  <View key={item.id} style={{ marginBottom: 8 }}>
                     <ExerciseTrainingCard
+                      key={item.id}
                       img={item.img_url}
                       exercise_id_in_exercises={item.exercise_id_in_exercises}
                       gif={item.gif}
@@ -139,13 +142,8 @@ export function TrainingSessionScreen() {
                       exerciseName={item.name}
                       series={item.series}
                     />
-                  )}
-                  ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
-                  showsVerticalScrollIndicator={false}
-                  style={{
-                    paddingBottom: 12,
-                  }}
-                />
+                  </View>
+                ))}
                 <TouchableOpacity
                   style={styles.button}
                   onPress={handleNavigateExerciseCatalog}
@@ -153,8 +151,8 @@ export function TrainingSessionScreen() {
                   <Text style={styles.buttonText}>Adicionar exercicio</Text>
                 </TouchableOpacity>
               </View>
-            </View>
-          </ScrollView>
+            </ScrollView>
+          </View>
         )
       }
 
@@ -239,7 +237,8 @@ const styles = StyleSheet.create({
     borderColor: defaultTheme.colors.backgroundComponents,
     borderWidth: 2,
     height: 52,
-    marginBottom: 12,
+    marginBottom: 16,
+    marginTop: 12,
   },
   buttonText: {
     fontSize: 18,
