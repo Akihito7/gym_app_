@@ -26,11 +26,13 @@ export function ExerciseCatalogCard({ fromRoute, id, name, group, img, gif, desc
 
   const { routineSelected, setRoutineSelected } = useContextRoutine();
 
+
   const [checked, setChecked] = useState(checkedInitialState(id));
   const { navigate } = useNavigation<TypeNavigation>();
   const { setWorkoutSession, workoutSession } = useContextWorkout()
 
   function checkedInitialState(id: number) {
+
     const alreadySelected = routineSelected?.exercises.some(item => String(item.exercise_id_in_exercises) === String(id));
     if (alreadySelected) {
       return true
@@ -40,22 +42,26 @@ export function ExerciseCatalogCard({ fromRoute, id, name, group, img, gif, desc
     }
   };
 
-  /* from route, depois verificar  onde vamos adicionar o exercicio, basicamente e isso o fluxo */
 
   function CheckedExerciseRemovedFromRoutine() {
+    const removedFromWorkout = workoutSession?.exercises?.filter(item => String(item.exercise_id_in_exercises) === String(id)) || []
     const removed = routineSelected!.exercises.filter(item => item.id === String(id))
-    if (removed!.length > 0) return;
+    if (removed!.length > 0  || removedFromWorkout.length > 0) return;
     else setChecked(false)
   };
 
   async function handleAddExerciseInRoutine() {
-    /* if(fromRoute === "training-session") add exercise in session training 
-    else keep same thing
-    */
-
     if (fromRoute === "training-session") {
       const alereaydIncludesInWorkout = workoutSession.exercises.filter(e => String(e.exercise_id_in_exercises) === String(id))
-      if (alereaydIncludesInWorkout.length > 0) return;
+      if (alereaydIncludesInWorkout.length > 0) {
+        setWorkoutSession(prev => {
+          return {
+            ...prev,
+            exercises: prev.exercises.filter(e => String(e.exercise_id_in_exercises) !== String(id))
+          }
+        })
+        return setChecked(prev => !prev)
+      }
       const exerciseWorkout = {
         img_url: img,
         exercise_id_in_exercises: id,
@@ -66,6 +72,7 @@ export function ExerciseCatalogCard({ fromRoute, id, name, group, img, gif, desc
         description,
         series: []
       }
+      setChecked(prev => !prev)
       setWorkoutSession(prev => {
         return {
           ...prev,
@@ -115,7 +122,6 @@ export function ExerciseCatalogCard({ fromRoute, id, name, group, img, gif, desc
       }
     }
   }
-  /* function  handleAddExerciseInTrainingSession */
 
   function handleNavigateDetails() {
     navigate("exercise-details", {
@@ -132,7 +138,7 @@ export function ExerciseCatalogCard({ fromRoute, id, name, group, img, gif, desc
 
   useEffect(() => {
     CheckedExerciseRemovedFromRoutine()
-  }, [routineSelected?.exercises])
+  }, [routineSelected?.exercises, workoutSession?.exercises])
 
   useEffect(() => {
     setChecked(checkedInitialState(id));
