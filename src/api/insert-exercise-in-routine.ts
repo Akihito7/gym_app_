@@ -11,9 +11,6 @@ export async function apiInsertExerciseInRoutine({ routineId, exerciseId, order 
     const response = await api.post("/routines/exercise", { routineId, exerciseId, order });
     return response.data
   } catch (error : any) {
-    if (error.response?.data) {
-      throw new Error(error.response.data.message);
-    }
-    throw new Error("INTERNAL ERROR SERVER");
+    throw new Error(error.message)
   }
 }

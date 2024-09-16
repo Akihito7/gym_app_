@@ -9,10 +9,6 @@ export async function apiCreateRoutine({ routineName }: ParamsApiCreateRoutine) 
     const response = await api.post("/routines", { routineName });
     return response.data[0].id
   } catch (error: any) {
-    if (error.response?.data) {
-      throw new Error(error.response.data.message);
-    }
-    throw new Error("INTERNAL ERROR SERVER");
+    throw new Error(error.message)
   }
-
 }

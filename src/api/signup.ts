@@ -10,9 +10,6 @@ export async function apiSignup({ username, email, password }: ParamsSignup) {
     const result = await api.post("/auth/signup", { username, email, password });
     return result.data;
   } catch (error: any) {
-    if (error.response?.data) {
-      throw new Error(error.response.data.message);
-    } 
-    throw new Error("INTERNAL ERROR SERVER");
+    throw new Error(error.message)
   }
 }

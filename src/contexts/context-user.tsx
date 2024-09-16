@@ -45,6 +45,7 @@ export function ContextUserProvider({ children }: TypeContextProvider) {
 
   async function signln({ email, password }: ParamsSignln) {
     try {
+      console.log("entrei here");
       const response = await apiSignln({ email, password });
       const token = response.token;
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`
