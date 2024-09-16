@@ -27,6 +27,7 @@
     "react-native-modal": "^13.0.1",
     "react-native-reanimated": "^3.15.2",
     "react-native-svg": "^15.6.0",
+    "victory-native": "^37.0.3-next.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {
