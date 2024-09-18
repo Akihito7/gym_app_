@@ -23,7 +23,7 @@ export function HomeScreen() {
   const { navigate } = useNavigation<TypeNavigation>();
   const { setRoutineSelected, routines, setRoutines,routineSelected } = useContextRoutine();
   const { setUser } = useContextUser();
-  const { setShouldGetWorkout, setWorkoutSession, workoutSession } = useContextWorkout()
+  const { setShouldGetWorkout, setWorkoutSession, workoutSession, setTimer} = useContextWorkout()
 
 
   function handleNavagiteToCreateRoutineAndSetRoutineContext() {
@@ -36,20 +36,25 @@ export function HomeScreen() {
   }
 
   async function handleContinueWithTrainingSession(value: boolean) {
-    if(routineSelected?.id){
-      navigate("training-session", { routineId : Number(routineSelected.id), haveWorkoutSession : true});
-    }
     const routineId = await AsyncStorage.getItem("routineId");
+    if(routineSelected?.id && !routineId && value){
+      navigate("training-session", { routineId : Number(routineSelected?.id), haveWorkoutSession : true});
+    }
     if (value && routineId) {
       setShouldGetWorkout(true)
       navigate("training-session", { routineId: Number(routineId), haveWorkoutSession: true });
-    } else {
+    }
+    
+    if(!value){
+      setTimer({minutes : 0, seconds : 0});
       setShouldGetWorkout(false);
       setWorkoutSession({} as TypeWorkoutSession);
       setRoutineSelected({} as TypeRoutineSelected);
       await AsyncStorage.removeItem("workout-session");
       await AsyncStorage.removeItem("routineId");
-      return
+      await AsyncStorage.removeItem("timer");
+      navigate("training-session", {routineId : 0, haveWorkoutSession : true});
+      navigate("home")
     }
   }
 
@@ -73,9 +78,7 @@ export function HomeScreen() {
     }, [])
   );
 
-
   useEffect(() => {
-    console.log("entrei uma unica vez")
     async function getWorkout() {
       const workout = await AsyncStorage.getItem("workout-session");
       const routineSelected = await AsyncStorage.getItem("routine-selected");
@@ -89,7 +92,7 @@ export function HomeScreen() {
   }, []);
 
   useEffect(() => {
-    console.log(workoutSession)
+    console.log("eu sou o workout session =>", workoutSession)
   }, [workoutSession])
 
 

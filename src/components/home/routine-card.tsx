@@ -51,7 +51,7 @@ export function RoutineCard({ id, name, exercises, exercisesLength }: ParamsRout
       exercises
     };
     setRoutineSelected(routine);
-    navigate("view-routine")
+    navigate("view-routine", {routineId : routine.id})
   }
 
   function handleNavigateTrainingSession() {

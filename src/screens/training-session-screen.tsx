@@ -30,15 +30,15 @@ export function TrainingSessionScreen() {
   const haveWorkoutSession = route.params.haveWorkoutSession;
   const { user } = useContextUser()
   const { routines } = useContextRoutine();
-  const { workoutSession, setWorkoutSession, shouldGetWorkout } = useContextWorkout();
+  const { workoutSession, setWorkoutSession, shouldGetWorkout,setTimer, timer } = useContextWorkout();
   const { setRoutineSelected, routineSelected } = useContextRoutine()
   const { navigate } = useNavigation<TypeNavigation>();
-  const [timer, setTimer] = useState({ minutes: 0, seconds: 0 });
   const [step, setStep] = useState<1 | 2>(1);
   const [workedGroups, setWorkedGroups] = useState<string[]>([]);
   const [finished] = useState(false);
 
   function setWorkoutFromRoutine() {
+    console.log("eu sou  o workout session na hora que navego pro training session =>", workoutSession)
     if (haveWorkoutSession) return;
     if(!shouldGetWorkout) return;
     const workout = routines.find(item => item.id === routineId);
@@ -51,8 +51,6 @@ export function TrainingSessionScreen() {
   }
 
   async function handleSaveTrainingSession() {
-
-
     const durationFormatted = `${String(timer.minutes).padStart(2, "0")}:${String(timer.seconds).padStart(2, "0")}`
     const response = await apiCreateSessionTraining({
       userId: user.id,

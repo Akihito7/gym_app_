@@ -5,6 +5,8 @@ type TypeContextWorkout = {
   setWorkoutSession: React.Dispatch<React.SetStateAction<TypeWorkoutSession>>
   shouldGetWorkout: boolean,
   setShouldGetWorkout : React.Dispatch<SetStateAction<boolean>>
+  timer : {minutes : number, seconds : number}
+  setTimer : React.Dispatch<SetStateAction<{minutes : number, seconds : number}>>
 }
 export const ContextWorkout = createContext({} as TypeContextWorkout);
 
@@ -37,12 +39,15 @@ export type TypeSetsWokoutSession = {
 export function ContextWorkoutProvider({ children }: TypeContextWorkoutProvider) {
   const [workoutSession, setWorkoutSession] = useState<TypeWorkoutSession>({} as TypeWorkoutSession);
   const [shouldGetWorkout, setShouldGetWorkout] = useState(false);
+  const [timer, setTimer] = useState({ minutes: 0, seconds: 0 });
   return (
     <ContextWorkout.Provider value={{
       workoutSession,
       setWorkoutSession,
       shouldGetWorkout,
       setShouldGetWorkout,
+      timer,
+      setTimer
     }}>
       {children}
     </ContextWorkout.Provider>

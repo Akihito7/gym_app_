@@ -5,18 +5,26 @@ import { Input } from "../components/input";
 import { FontAwesome } from "@expo/vector-icons";
 import { useContextRoutine } from "../hooks/useContextRoutine";
 import { ExerciseViewRoutineCard } from "../components/view-routine/exercise-view-routine-card";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TypeAppRoutes } from "../routes/app.routes";
+import { useContextWorkout } from "../hooks/useContextWorkout";
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>;
 
+type ViewRoutine = RouteProp<TypeAppRoutes, 'view-routine'>;
+
 export function ViewRoutineScreen() {
+  const route = useRoute<ViewRoutine>();
+  const routineId = route.params.routineId;
   const { routineSelected } = useContextRoutine();
+  const { setShouldGetWorkout } = useContextWorkout();
+
   const { navigate } = useNavigation<TypeNavigation>();
 
   function handleNavigateTrainingSession() {
-    navigate("training-session", { routineId: routineSelected?.id ?? 0 });
+    setShouldGetWorkout(true)
+    navigate("training-session", { routineId : routineId ?? 0, haveWorkoutSession : false });
   }
 
   return (

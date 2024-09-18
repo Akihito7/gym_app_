@@ -4,6 +4,7 @@ import { Header } from "../components/header";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TypeAppRoutes } from "../routes/app.routes";
+import { useContextRoutine } from "../hooks/useContextRoutine";
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>
 type ExerciseDetailsRouteProp = RouteProp<TypeAppRoutes, 'exercise-details'>;
@@ -11,12 +12,13 @@ type ExerciseDetailsRouteProp = RouteProp<TypeAppRoutes, 'exercise-details'>;
 export function ExerciseDetailsScreen() {
   const route = useRoute<ExerciseDetailsRouteProp>();
   const { item, fromRoute } = route.params;
+  const { routineSelected } = useContextRoutine()
 
   const { navigate } = useNavigation<TypeNavigation>();
 
   function handleNavigateBack() {
     if (fromRoute === 'exercise-catalog') navigate("exercise-catalog", {fromRoute : ""});
-    if (fromRoute === 'view-routine') navigate("view-routine");
+    if (fromRoute === 'view-routine') navigate("view-routine", {routineId : routineSelected?.id ?? 0});
     if(fromRoute === 'update-routine') navigate('update-routine');
     if(fromRoute === 'create-routine') navigate('create-routine')
   }

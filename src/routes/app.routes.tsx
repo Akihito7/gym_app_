@@ -31,7 +31,9 @@ export type TypeAppRoutes = {
     },
     fromRoute: string
   },
-  "view-routine": undefined;
+  "view-routine": {
+    routineId? : number;
+  };
   "profile": undefined;
   "training-session": {
     routineId: number,
