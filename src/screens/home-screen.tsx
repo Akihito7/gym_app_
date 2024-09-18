@@ -3,7 +3,7 @@ import { Header } from "../components/home/header";
 import { defaultTheme } from "../configs/default-theme";
 import { RoutineCard } from "../components/home/routine-card";
 import { Input } from "../components/home/input";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useNavigation, useFocusEffect, DefaultTheme } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TypeAppRoutes } from "../routes/app.routes";
 import { useContextRoutine } from "../hooks/useContextRoutine";
@@ -14,14 +14,16 @@ import { UserDTO } from "../dtos/user-DTO";
 import { apiGetManyRoutines } from "../api/get-many-routines";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContextWorkout } from "../hooks/useContextWorkout";
+import { TypeWorkoutSession } from "../contexts/context-workout";
+import { TypeRoutineSelected } from "../contexts/context-routine";
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>;
 
 export function HomeScreen() {
   const { navigate } = useNavigation<TypeNavigation>();
-  const { setRoutineSelected, routines, setRoutines } = useContextRoutine();
+  const { setRoutineSelected, routines, setRoutines,routineSelected } = useContextRoutine();
   const { setUser } = useContextUser();
-  const { workoutInProgress, setWorkoutSession, setWorkoutInProgress } = useContextWorkout()
+  const { setShouldGetWorkout, setWorkoutSession, workoutSession } = useContextWorkout()
 
 
   function handleNavagiteToCreateRoutineAndSetRoutineContext() {
@@ -31,6 +33,24 @@ export function HomeScreen() {
       exercises: []
     });
     navigate("create-routine");
+  }
+
+  async function handleContinueWithTrainingSession(value: boolean) {
+    if(routineSelected?.id){
+      navigate("training-session", { routineId : Number(routineSelected.id), haveWorkoutSession : true});
+    }
+    const routineId = await AsyncStorage.getItem("routineId");
+    if (value && routineId) {
+      setShouldGetWorkout(true)
+      navigate("training-session", { routineId: Number(routineId), haveWorkoutSession: true });
+    } else {
+      setShouldGetWorkout(false);
+      setWorkoutSession({} as TypeWorkoutSession);
+      setRoutineSelected({} as TypeRoutineSelected);
+      await AsyncStorage.removeItem("workout-session");
+      await AsyncStorage.removeItem("routineId");
+      return
+    }
   }
 
   async function getUser() {
@@ -55,21 +75,22 @@ export function HomeScreen() {
 
 
   useEffect(() => {
+    console.log("entrei uma unica vez")
     async function getWorkout() {
       const workout = await AsyncStorage.getItem("workout-session");
       const routineSelected = await AsyncStorage.getItem("routine-selected");
-      const routineId = await AsyncStorage.getItem("routineId");
       const parsedWorkout = workout ? JSON.parse(workout) : null
       const parsedRoutine = routineSelected ? JSON.parse(routineSelected) : null
-      if (!parsedWorkout || !routineId || !parsedRoutine) return;
+      if (!parsedWorkout || !parsedRoutine) return;
       setWorkoutSession(parsedWorkout);
       setRoutineSelected(parsedRoutine);
-      navigate("training-session", { routineId: Number(routineId), haveWorkoutSession : true})
-     /*  await AsyncStorage.removeItem("workout-session")
-      await AsyncStorage.removeItem("routineId") */
     }
     getWorkout()
   }, []);
+
+  useEffect(() => {
+    console.log(workoutSession)
+  }, [workoutSession])
 
 
 
@@ -107,6 +128,44 @@ export function HomeScreen() {
           <Text style={styles.buttonText}>Criar nova rotina</Text>
         </TouchableOpacity>
       </View>
+
+      {
+        workoutSession.name && (
+          <View style={styles.containerHaveTrainingSessionActived}>
+            <Text style={styles.titleContainerHaveTrainingSessionActived}>
+              Você tem um treino ativo, deseja continuar?
+            </Text>
+
+            <View
+              style={{
+                flexDirection: "row",
+                width: "100%",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 12,
+                marginTop: 16
+              }}>
+              <TouchableOpacity
+                style={{ ...styles.buttonAction, backgroundColor: "#8bdd76" }}
+                onPress={() => handleContinueWithTrainingSession(true)}
+              >
+                <Text style={styles.textButtonAction}>Sim</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{ ...styles.buttonAction, backgroundColor: "#f07979" }}
+                onPress={() => handleContinueWithTrainingSession(false)}
+              >
+                <Text style={styles.textButtonAction}>Não</Text>
+              </TouchableOpacity>
+
+            </View>
+
+          </View>
+        )
+      }
+
+
     </View>
   );
 }
@@ -154,5 +213,32 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "semibold",
     color: defaultTheme.colors.primaryText,
+  },
+  containerHaveTrainingSessionActived: {
+    backgroundColor: defaultTheme.colors.backgroundComponents,
+    borderTopStartRadius: 24,
+    borderTopEndRadius: 24,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+  },
+  titleContainerHaveTrainingSessionActived: {
+    fontSize: 16,
+    color: defaultTheme.colors.primaryText,
+    marginTop: 8,
+  },
+  buttonAction: {
+    width: 80,
+    paddingVertical: 8,
+    backgroundColor: defaultTheme.colors.defaultRed,
+    borderRadius: 99,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  textButtonAction: {
+    fontSize: 16,
+    color: defaultTheme.colors.primaryText,
   }
 });
+
+//"#8bdd76"
+//"#f07979"

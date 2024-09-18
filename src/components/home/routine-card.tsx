@@ -9,6 +9,7 @@ import { TypeAppRoutes } from "../../routes/app.routes";
 import { useNavigation } from "@react-navigation/native";
 import { useContextRoutine } from "../../hooks/useContextRoutine";
 import { apiDeleteRoutine } from "../../api/delete-routine";
+import { useContextWorkout } from "../../hooks/useContextWorkout";
 
 type ParamsRoutineCard = {
   id: number
@@ -37,6 +38,7 @@ export function RoutineCard({ id, name, exercises, exercisesLength }: ParamsRout
   const [isModalVisible, setModalVisible] = useState(false);
   const { navigate } = useNavigation<TypeNavigation>();
   const { setRoutines, setRoutineSelected } = useContextRoutine()
+  const { setShouldGetWorkout } = useContextWorkout()
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -58,6 +60,7 @@ export function RoutineCard({ id, name, exercises, exercisesLength }: ParamsRout
       name: "",
       exercises : []
     })
+    setShouldGetWorkout(true)
     navigate("training-session", { routineId: id , haveWorkoutSession : false});
   }
 

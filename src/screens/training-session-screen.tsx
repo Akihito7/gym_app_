@@ -30,17 +30,17 @@ export function TrainingSessionScreen() {
   const haveWorkoutSession = route.params.haveWorkoutSession;
   const { user } = useContextUser()
   const { routines } = useContextRoutine();
-  const { workoutSession, setWorkoutSession, setWorkoutInProgress, workoutInProgress } = useContextWorkout();
+  const { workoutSession, setWorkoutSession, shouldGetWorkout } = useContextWorkout();
   const { setRoutineSelected, routineSelected } = useContextRoutine()
   const { navigate } = useNavigation<TypeNavigation>();
   const [timer, setTimer] = useState({ minutes: 0, seconds: 0 });
   const [step, setStep] = useState<1 | 2>(1);
   const [workedGroups, setWorkedGroups] = useState<string[]>([]);
-  const [finished, setFinished] = useState(false);
+  const [finished] = useState(false);
 
   function setWorkoutFromRoutine() {
-
-    if(haveWorkoutSession) return ;
+    if (haveWorkoutSession) return;
+    if(!shouldGetWorkout) return;
     const workout = routines.find(item => item.id === routineId);
     if (workout != undefined) {
       setWorkoutSession(workout);
@@ -53,7 +53,7 @@ export function TrainingSessionScreen() {
   async function handleSaveTrainingSession() {
 
 
- const durationFormatted = `${String(timer.minutes).padStart(2, "0")}:${String(timer.seconds).padStart(2, "0")}`
+    const durationFormatted = `${String(timer.minutes).padStart(2, "0")}:${String(timer.seconds).padStart(2, "0")}`
     const response = await apiCreateSessionTraining({
       userId: user.id,
       routineId,
@@ -81,7 +81,7 @@ export function TrainingSessionScreen() {
     setWorkoutSession({} as TypeWorkoutSession)
     setRoutineSelected({} as TypeRoutineSelected)
     setStep(1)
-    navigate("home")  
+    navigate("home")
 
 
   };
@@ -94,7 +94,14 @@ export function TrainingSessionScreen() {
     setStep(1)
   }
 
-
+  async function getTimerValueInital() {
+    const timer = await AsyncStorage.getItem("timer");
+    const parsedTimer = timer ? JSON.parse(timer) : null;
+    if (parsedTimer) setTimer(parsedTimer);
+  }
+  useEffect(() => {
+    getTimerValueInital()
+  }, [])
 
   function getWorkedGroup() {
     const groupsWorked: string[] = [];
@@ -112,26 +119,25 @@ export function TrainingSessionScreen() {
     workoutSession?.exercises?.forEach(e => {
       totalSeries += e.series.length
     })
-
     return totalSeries
   }
 
   useEffect(() => {
     setWorkoutFromRoutine();
-  }, [routineId,routineSelected])
+  }, [routineId, routineSelected])
 
   useEffect(() => {
     if (step === 2) getWorkedGroup();
   }, [step])
 
-   
- const isFocused = useIsFocused();
+
+  const isFocused = useIsFocused();
   const [appState, setAppState] = useState(AppState.currentState);
- useEffect(() => {
-    if (!isFocused) return;  
+  useEffect(() => {
+    if (!isFocused) return;
     const subscription = AppState.addEventListener('change', async nextAppState => {
       if (appState.match(/active/) && nextAppState === 'background') {
-        const status = finished ? "finished" : "not-finished"            
+        const status = finished ? "finished" : "not-finished"
         const workoutSessionWithState = {
           ...workoutSession,
           status,
@@ -139,6 +145,7 @@ export function TrainingSessionScreen() {
         await AsyncStorage.setItem("routine-selected", JSON.stringify(routineSelected))
         await AsyncStorage.setItem("workout-session", JSON.stringify(workoutSessionWithState));
         await AsyncStorage.setItem("routineId", JSON.stringify(routineId));
+        await AsyncStorage.setItem("timer", JSON.stringify(timer));
       }
       setAppState(nextAppState);
     });
@@ -146,7 +153,16 @@ export function TrainingSessionScreen() {
     return () => {
       subscription.remove();
     };
-  }, [appState, workoutSession, isFocused]);  
+  }, [appState, workoutSession, isFocused]);
+
+  useEffect(() => {
+    async function saveTimer() {
+      if (timer) {
+        await AsyncStorage.setItem("timer", JSON.stringify(timer));
+      }
+    }
+    saveTimer()
+  })
 
   return (
     <View style={styles.container}>
