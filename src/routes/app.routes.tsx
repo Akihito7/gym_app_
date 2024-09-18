@@ -34,7 +34,8 @@ export type TypeAppRoutes = {
   "view-routine": undefined;
   "profile": undefined;
   "training-session": {
-    routineId: number
+    routineId: number,
+    haveWorkoutSession : boolean,
   };
   "update-routine": undefined;
   "history-training-session": undefined;

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView, AppState } from "react-native";
 import { defaultTheme } from "../configs/default-theme";
 import { Timer } from "../components/training-session/timer";
 import { ExerciseTrainingCard } from "../components/training-session/exercise-training-card";
@@ -14,6 +14,9 @@ import { apiCreateSessionTraining } from "../api/create-session-training";
 import { apiInsertExerciseInTrainingSession } from "../api/insert-exercise-in-training-session";
 import { apiInsertSetsInTrainingExercise } from "../api/insert-sets-in-training-exercise";
 import { TypeWorkoutSession } from "../contexts/context-workout";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { TypeRoutineSelected } from "../contexts/context-routine";
+import { useIsFocused } from '@react-navigation/native';
 
 
 
@@ -24,27 +27,33 @@ export function TrainingSessionScreen() {
 
   const route = useRoute<TrainingSessionScreen>();
   const routineId = route.params.routineId;
+  const haveWorkoutSession = route.params.haveWorkoutSession;
   const { user } = useContextUser()
   const { routines } = useContextRoutine();
-  const { workoutSession, setWorkoutSession } = useContextWorkout();
+  const { workoutSession, setWorkoutSession, setWorkoutInProgress, workoutInProgress } = useContextWorkout();
+  const { setRoutineSelected, routineSelected } = useContextRoutine()
   const { navigate } = useNavigation<TypeNavigation>();
   const [timer, setTimer] = useState({ minutes: 0, seconds: 0 });
   const [step, setStep] = useState<1 | 2>(1);
   const [workedGroups, setWorkedGroups] = useState<string[]>([]);
+  const [finished, setFinished] = useState(false);
 
   function setWorkoutFromRoutine() {
+
+    if(haveWorkoutSession) return ;
     const workout = routines.find(item => item.id === routineId);
     if (workout != undefined) {
       setWorkoutSession(workout);
     }
   };
-
   function handleNavigateExerciseCatalog() {
     navigate("exercise-catalog", { fromRoute: "training-session" })
   }
 
   async function handleSaveTrainingSession() {
-    const durationFormatted = `${String(timer.minutes).padStart(2, "0")}:${String(timer.seconds).padStart(2, "0")}`
+
+
+ const durationFormatted = `${String(timer.minutes).padStart(2, "0")}:${String(timer.seconds).padStart(2, "0")}`
     const response = await apiCreateSessionTraining({
       userId: user.id,
       routineId,
@@ -67,9 +76,14 @@ export function TrainingSessionScreen() {
       })
 
     })
+    await AsyncStorage.removeItem("workout-session")
+    await AsyncStorage.removeItem("routineId")
     setWorkoutSession({} as TypeWorkoutSession)
+    setRoutineSelected({} as TypeRoutineSelected)
     setStep(1)
-    navigate("home")
+    navigate("home")  
+
+
   };
 
   function nextStep() {
@@ -80,6 +94,8 @@ export function TrainingSessionScreen() {
     setStep(1)
   }
 
+
+
   function getWorkedGroup() {
     const groupsWorked: string[] = [];
     workoutSession?.exercises?.forEach(e => {
@@ -88,7 +104,6 @@ export function TrainingSessionScreen() {
       if (alreadyIncluds) return;
       groupsWorked.push(e.group.toLocaleLowerCase());
     })
-
     setWorkedGroups(groupsWorked);
   }
 
@@ -103,11 +118,35 @@ export function TrainingSessionScreen() {
 
   useEffect(() => {
     setWorkoutFromRoutine();
-  }, [routineId])
+  }, [routineId,routineSelected])
 
   useEffect(() => {
     if (step === 2) getWorkedGroup();
   }, [step])
+
+   
+ const isFocused = useIsFocused();
+  const [appState, setAppState] = useState(AppState.currentState);
+ useEffect(() => {
+    if (!isFocused) return;  
+    const subscription = AppState.addEventListener('change', async nextAppState => {
+      if (appState.match(/active/) && nextAppState === 'background') {
+        const status = finished ? "finished" : "not-finished"            
+        const workoutSessionWithState = {
+          ...workoutSession,
+          status,
+        }
+        await AsyncStorage.setItem("routine-selected", JSON.stringify(routineSelected))
+        await AsyncStorage.setItem("workout-session", JSON.stringify(workoutSessionWithState));
+        await AsyncStorage.setItem("routineId", JSON.stringify(routineId));
+      }
+      setAppState(nextAppState);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [appState, workoutSession, isFocused]);  
 
   return (
     <View style={styles.container}>

@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { FlatList, StyleSheet, View, Text, TouchableOpacity, AppState } from "react-native";
 import { Header } from "../components/home/header";
 import { defaultTheme } from "../configs/default-theme";
 import { RoutineCard } from "../components/home/routine-card";
@@ -8,10 +8,12 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TypeAppRoutes } from "../routes/app.routes";
 import { useContextRoutine } from "../hooks/useContextRoutine";
 import { apiGetUser } from "../api/get-user";
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useContextUser } from "../hooks/useContextUser";
 import { UserDTO } from "../dtos/user-DTO";
 import { apiGetManyRoutines } from "../api/get-many-routines";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useContextWorkout } from "../hooks/useContextWorkout";
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>;
 
@@ -19,6 +21,8 @@ export function HomeScreen() {
   const { navigate } = useNavigation<TypeNavigation>();
   const { setRoutineSelected, routines, setRoutines } = useContextRoutine();
   const { setUser } = useContextUser();
+  const { workoutInProgress, setWorkoutSession, setWorkoutInProgress } = useContextWorkout()
+
 
   function handleNavagiteToCreateRoutineAndSetRoutineContext() {
     setRoutineSelected({
@@ -39,17 +43,35 @@ export function HomeScreen() {
     setRoutines(routines);
   }
 
-  // Busca o usuário e as rotinas assim que a tela for montada
   useEffect(() => {
     getUser();
   }, []);
 
-  // Garante que as rotinas sejam buscadas toda vez que a tela entrar em foco
   useFocusEffect(
     useCallback(() => {
       getManyRoutines();
     }, [])
   );
+
+
+  useEffect(() => {
+    async function getWorkout() {
+      const workout = await AsyncStorage.getItem("workout-session");
+      const routineSelected = await AsyncStorage.getItem("routine-selected");
+      const routineId = await AsyncStorage.getItem("routineId");
+      const parsedWorkout = workout ? JSON.parse(workout) : null
+      const parsedRoutine = routineSelected ? JSON.parse(routineSelected) : null
+      if (!parsedWorkout || !routineId || !parsedRoutine) return;
+      setWorkoutSession(parsedWorkout);
+      setRoutineSelected(parsedRoutine);
+      navigate("training-session", { routineId: Number(routineId), haveWorkoutSession : true})
+     /*  await AsyncStorage.removeItem("workout-session")
+      await AsyncStorage.removeItem("routineId") */
+    }
+    getWorkout()
+  }, []);
+
+
 
   return (
     <View style={styles.container}>

@@ -2,8 +2,10 @@ import { StatusBar } from 'expo-status-bar';
 import { ContextRoutineProvider } from './src/contexts/context-routine';
 import { Routes } from './src/routes';
 import { ContextWorkoutProvider } from './src/contexts/context-workout';
-import { ContextUser, ContextUserProvider } from './src/contexts/context-user';
+import { ContextUserProvider } from './src/contexts/context-user';
 import { ContextMessageProvider } from './src/contexts/context-message';
+import { useEffect, useState } from 'react';
+import { AppState } from 'react-native';
 
 export default function App() {
   return (

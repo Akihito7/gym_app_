@@ -11,7 +11,7 @@ type ParamsTimer = {
 };
 
 export function Timer({ timer, setTimer } : ParamsTimer) {
-    const [timerStatus, setTimerStatus] = useState(false);
+    const [timerStatus, setTimerStatus] = useState(true);
     useEffect(() => {
         const tick = () => {
             if (!timerStatus) return;

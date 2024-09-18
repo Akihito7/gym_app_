@@ -28,20 +28,12 @@ export function ExerciseCatalogScreen() {
   const { routineSelected } = useContextRoutine()
   const { params } = useRoute<ExerciseCatalogProp>()
   const fromRoute = params.fromRoute;
-
-  console.log("EU VIM DA ROTA => ", fromRoute)
-
+  
   function handleNavigateBack() {
-    /* 
-    if(fromRoute === "training-session") navigate("training-session")
-    else navigate("create-routine")
-    */
-
-    if (fromRoute === "training-session") navigate("training-session", { routineId: Number(routineSelected!.id) ?? 0 });
+    if (fromRoute === "training-session") navigate("training-session", { routineId: Number(routineSelected!.id) ?? 0, haveWorkoutSession : false });
     if (fromRoute === "create-routine") navigate("create-routine")
+    if(fromRoute === "update-routine")  navigate("update-routine")
   };
-
-
 
   function handleInputValue(value: string) {
     setSearchInputValue(value)
@@ -69,32 +61,34 @@ export function ExerciseCatalogScreen() {
             color={defaultTheme.colors.primaryText}
           />
         </Input>
-
-        <FlatList
-          data={
-            searchInputValue
-              ? exercises.filter(item => item.name.toLowerCase().includes(searchInputValue.toLowerCase()))
-              : exercises
-          }
-          keyExtractor={item => String(item.id)}
-          renderItem={({ item }) => (
-            <ExerciseCatalogCard
-              fromRoute={fromRoute}
-              key={item.id}
-              id={item.id}
-              name={item.name}
-              img={item.img_url}
-              group={item.muscle_group}
-              gif={item.gif_url}
-              description={item.description}
-            />)}
-          ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
-          showsVerticalScrollIndicator={false}
-          style={{
-            marginBottom: 18,
-            marginTop: 24,
-          }}
-        />
+  {
+    exercises &&        <FlatList
+    data={
+      searchInputValue
+        ? exercises?.filter(item => item.name.toLowerCase().includes(searchInputValue.toLowerCase()))
+        : exercises
+    }
+    keyExtractor={item => String(item.id)}
+    renderItem={({ item }) => (
+      <ExerciseCatalogCard
+        fromRoute={fromRoute}
+        key={item.id}
+        id={item.id}
+        name={item.name}
+        img={item.img_url}
+        group={item.muscle_group}
+        gif={item.gif_url}
+        description={item.description}
+      />)}
+    ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
+    showsVerticalScrollIndicator={false}
+    style={{
+      marginBottom: 18,
+      marginTop: 24,
+    }}
+  />
+  }
+ 
         <TouchableOpacity
           style={styles.button}
           onPress={handleNavigateBack}

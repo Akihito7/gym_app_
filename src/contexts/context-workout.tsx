@@ -1,8 +1,10 @@
-import { createContext, useState } from "react";
+import { createContext, SetStateAction, useState } from "react";
 
 type TypeContextWorkout = {
   workoutSession: TypeWorkoutSession,
   setWorkoutSession: React.Dispatch<React.SetStateAction<TypeWorkoutSession>>
+  workoutInProgress : boolean,
+  setWorkoutInProgress : React.Dispatch<SetStateAction<boolean>>
 }
 export const ContextWorkout = createContext({} as TypeContextWorkout);
 
@@ -33,11 +35,14 @@ export type TypeSetsWokoutSession = {
 }
 
 export function ContextWorkoutProvider({ children }: TypeContextWorkoutProvider) {
-  const [workoutSession, setWorkoutSession] = useState<TypeWorkoutSession>({} as TypeWorkoutSession)
+  const [workoutSession, setWorkoutSession] = useState<TypeWorkoutSession>({} as TypeWorkoutSession);
+  const [workoutInProgress, setWorkoutInProgress] = useState(false);
   return (
     <ContextWorkout.Provider value={{
       workoutSession,
-      setWorkoutSession
+      setWorkoutSession,
+      workoutInProgress,
+      setWorkoutInProgress,
     }}>
       {children}
     </ContextWorkout.Provider>

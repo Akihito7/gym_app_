@@ -20,6 +20,7 @@ type ParamsRoutineCard = {
     name: string;
     group: string;
     gif: string;
+    img_url : string
     description: string;
     series: {
       id: number,
@@ -52,7 +53,12 @@ export function RoutineCard({ id, name, exercises, exercisesLength }: ParamsRout
   }
 
   function handleNavigateTrainingSession() {
-    navigate("training-session", { routineId: id });
+    setRoutineSelected({
+      id,
+      name: "",
+      exercises : []
+    })
+    navigate("training-session", { routineId: id , haveWorkoutSession : false});
   }
 
   function handleNavigateUpdateRoutine() {

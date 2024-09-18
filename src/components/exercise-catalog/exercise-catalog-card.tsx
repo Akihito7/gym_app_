@@ -32,9 +32,9 @@ export function ExerciseCatalogCard({ fromRoute, id, name, group, img, gif, desc
   const { setWorkoutSession, workoutSession } = useContextWorkout()
 
   function checkedInitialState(id: number) {
-
-    const alreadySelected = routineSelected?.exercises.some(item => String(item.exercise_id_in_exercises) === String(id));
-    if (alreadySelected) {
+    const alreadySelectedInWorkoutSession = workoutSession?.exercises?.some(item => String(item.exercise_id_in_exercises) == String(id))
+    const alreadySelectedInRoutineSelected = routineSelected?.exercises?.some(item => String(item.exercise_id_in_exercises) === String(id));
+    if (alreadySelectedInRoutineSelected || alreadySelectedInWorkoutSession) {
       return true
     }
     else {
@@ -42,17 +42,17 @@ export function ExerciseCatalogCard({ fromRoute, id, name, group, img, gif, desc
     }
   };
 
-
   function CheckedExerciseRemovedFromRoutine() {
     const removedFromWorkout = workoutSession?.exercises?.filter(item => String(item.exercise_id_in_exercises) === String(id)) || []
-    const removed = routineSelected!.exercises.filter(item => item.id === String(id))
-    if (removed!.length > 0  || removedFromWorkout.length > 0) return;
+    const removed = routineSelected!.exercises?.filter(item => item.id === String(id))
+    if (removed?.length > 0  || removedFromWorkout.length > 0) return;
     else setChecked(false)
   };
 
   async function handleAddExerciseInRoutine() {
     if (fromRoute === "training-session") {
-      const alereaydIncludesInWorkout = workoutSession.exercises.filter(e => String(e.exercise_id_in_exercises) === String(id))
+
+      const alereaydIncludesInWorkout = workoutSession?.exercises?.filter(e => String(e.exercise_id_in_exercises) === String(id))
       if (alereaydIncludesInWorkout.length > 0) {
         setWorkoutSession(prev => {
           return {
