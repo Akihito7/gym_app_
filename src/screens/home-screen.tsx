@@ -16,6 +16,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContextWorkout } from "../hooks/useContextWorkout";
 import { TypeWorkoutSession } from "../contexts/context-workout";
 import { TypeRoutineSelected } from "../contexts/context-routine";
+import { userIsConnected } from "../utils/check-connection-internet";
 
 type TypeNavigation = BottomTabNavigationProp<TypeAppRoutes>;
 
@@ -92,8 +93,8 @@ export function HomeScreen() {
   }, []);
 
   useEffect(() => {
-    console.log("eu sou o workout session =>", workoutSession)
-  }, [workoutSession])
+    console.log("connected", userIsConnected())
+  }, [])
 
 
 

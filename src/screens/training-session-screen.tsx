@@ -17,6 +17,7 @@ import { TypeWorkoutSession } from "../contexts/context-workout";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TypeRoutineSelected } from "../contexts/context-routine";
 import { useIsFocused } from '@react-navigation/native';
+import { userIsConnected } from "../utils/check-connection-internet";
 
 
 
@@ -30,7 +31,7 @@ export function TrainingSessionScreen() {
   const haveWorkoutSession = route.params.haveWorkoutSession;
   const { user } = useContextUser()
   const { routines } = useContextRoutine();
-  const { workoutSession, setWorkoutSession, shouldGetWorkout,setTimer, timer } = useContextWorkout();
+  const { workoutSession, setWorkoutSession, shouldGetWorkout, setTimer, timer } = useContextWorkout();
   const { setRoutineSelected, routineSelected } = useContextRoutine()
   const { navigate } = useNavigation<TypeNavigation>();
   const [step, setStep] = useState<1 | 2>(1);
@@ -39,7 +40,7 @@ export function TrainingSessionScreen() {
 
   function setWorkoutFromRoutine() {
     if (haveWorkoutSession) return;
-    if(!shouldGetWorkout) return;
+    if (!shouldGetWorkout) return;
     const workout = routines.find(item => item.id === routineId);
     if (workout != undefined) {
       setWorkoutSession(workout);
@@ -79,7 +80,7 @@ export function TrainingSessionScreen() {
     await AsyncStorage.removeItem("timer");
     setWorkoutSession({} as TypeWorkoutSession)
     //setRoutineSelected({} as TypeRoutineSelected)
-    setTimer({minutes : 0, seconds : 0})
+    setTimer({ minutes: 0, seconds: 0 })
     setStep(1)
     navigate("home")
   };
