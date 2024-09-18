@@ -38,7 +38,6 @@ export function TrainingSessionScreen() {
   const [finished] = useState(false);
 
   function setWorkoutFromRoutine() {
-    console.log("eu sou  o workout session na hora que navego pro training session =>", workoutSession)
     if (haveWorkoutSession) return;
     if(!shouldGetWorkout) return;
     const workout = routines.find(item => item.id === routineId);
@@ -76,12 +75,13 @@ export function TrainingSessionScreen() {
     })
     await AsyncStorage.removeItem("workout-session")
     await AsyncStorage.removeItem("routineId")
+    await AsyncStorage.removeItem("routine-selected")
+    await AsyncStorage.removeItem("timer");
     setWorkoutSession({} as TypeWorkoutSession)
-    setRoutineSelected({} as TypeRoutineSelected)
+    //setRoutineSelected({} as TypeRoutineSelected)
+    setTimer({minutes : 0, seconds : 0})
     setStep(1)
     navigate("home")
-
-
   };
 
   function nextStep() {
